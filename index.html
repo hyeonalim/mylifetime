@@ -518,6 +518,15 @@ html[data-theme="system"] .sheet label{
 }
 </style>
 
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#f4f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101112" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+
 </head><body><main class="app">
 <div class="top"><div><div class="sub"></div></div></div>
 <header class="titleOnlyHeader"><h1 id="currentPageTitle">홈</h1></header><button class="floatingMenu" onclick="toggleMenu()" aria-label="메뉴"><span></span><span></span><span></span></button>
@@ -597,6 +606,14 @@ html[data-theme="system"] .sheet label{
 </div>
 <p class="tiny" style="margin:10px 2px 0">시스템은 휴대폰의 다크/라이트 모드를 따라가요.</p>
 </div>
+
+<h3>앱 설치</h3>
+<div class="card">
+<p class="muted" style="margin-top:0">홈 화면에 설치하면 주소창 없이 앱처럼 실행할 수 있어요. 기록 데이터는 기존처럼 이 기기에 저장됩니다.</p>
+<button id="installPwaBtn" class="btn dark wide" type="button" onclick="installPwa()" style="display:none">대신삼 앱 설치</button>
+<p id="installPwaHint" class="tiny" style="margin:10px 2px 0">설치 가능 여부를 확인하고 있어요.</p>
+</div>
+
 <h3>데이터 관리</h3>
 <div class="card">
 <p class="muted" style="margin-top:0">기록을 백업하거나 이전 백업 데이터를 불러오고, 전체 데이터를 초기화할 수 있어요.</p>
@@ -965,6 +982,65 @@ function importBackupFile(event){
   };
   reader.readAsText(file,'utf-8');
 }
+
+// ---- PWA install / service worker ----
+let deferredPwaPrompt = null;
+
+function updateInstallPwaUI(){
+  const btn = document.getElementById('installPwaBtn');
+  const hint = document.getElementById('installPwaHint');
+  if(!btn || !hint) return;
+
+  const standalone = window.matchMedia('(display-mode: standalone)').matches ||
+                     window.navigator.standalone === true;
+  if(standalone){
+    btn.style.display='none';
+    hint.textContent='이미 앱으로 설치되어 있어요.';
+    return;
+  }
+  if(deferredPwaPrompt){
+    btn.style.display='block';
+    hint.textContent='설치 버튼을 누르면 홈 화면에 앱으로 추가할 수 있어요.';
+  }else{
+    btn.style.display='none';
+    hint.textContent='Chrome에서 HTTPS로 배포된 사이트를 열면 설치할 수 있어요.';
+  }
+}
+
+async function installPwa(){
+  if(!deferredPwaPrompt){
+    updateInstallPwaUI();
+    return;
+  }
+  deferredPwaPrompt.prompt();
+  try{ await deferredPwaPrompt.userChoice; }catch(e){}
+  deferredPwaPrompt = null;
+  updateInstallPwaUI();
+}
+
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPwaPrompt = e;
+  updateInstallPwaUI();
+});
+window.addEventListener('appinstalled', ()=>{
+  deferredPwaPrompt = null;
+  updateInstallPwaUI();
+});
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', async ()=>{
+    try{
+      await navigator.serviceWorker.register('./sw.js');
+    }catch(e){
+      console.warn('Service worker registration failed:', e);
+    }
+    updateInstallPwaUI();
+  });
+}else{
+  window.addEventListener('load', updateInstallPwaUI);
+}
+
 </script>
 
 </body></html>
