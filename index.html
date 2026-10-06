@@ -1,357 +1,917 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#111111" />
-<title>Life — 타임라인 & 지출관리</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>대신삼 v5</title>
 <style>
-:root{--bg:#f5f5f3;--card:#fff;--text:#111;--muted:#777;--line:#e8e8e4;--accent:#111;--soft:#ecece8;--danger:#c94b4b;--ok:#237a50;--shadow:0 10px 30px rgba(0,0,0,.06);--nav:rgba(250,250,248,.92)}
-[data-theme="dark"]{--bg:#0e0e0e;--card:#191919;--text:#f5f5f5;--muted:#aaa;--line:#2c2c2c;--accent:#fff;--soft:#252525;--danger:#ff7777;--ok:#68c796;--shadow:0 10px 30px rgba(0,0,0,.25);--nav:rgba(18,18,18,.92)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}.app{width:min(100%,720px);margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 14px calc(94px + env(safe-area-inset-bottom))}.top{display:flex;justify-content:space-between;align-items:center;padding:18px 2px 12px;gap:8px}.eyebrow{font-size:12px;color:var(--muted);font-weight:700}.top h1{font-size:25px;margin:2px 0 0;letter-spacing:-1px}.iconbtn{width:42px;height:42px;border:0;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-size:18px}.view{display:none}.view.active{display:block}.hero,.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}.hero{padding:19px;margin-bottom:12px}.hero small,.muted{color:var(--muted)}.money{font-size:31px;font-weight:850;letter-spacing:-1.5px;margin:4px 0 14px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mini{background:var(--soft);padding:12px;border-radius:16px;min-width:0}.mini span{font-size:11px;color:var(--muted);display:block}.mini b{font-size:15px;display:block;margin-top:4px;overflow-wrap:anywhere}.pace{margin-top:12px;font-size:13px;font-weight:750}.pace.ok{color:var(--ok)}.pace.bad{color:var(--danger)}.progress{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-top:9px}.progress>i{display:block;height:100%;background:var(--accent);border-radius:99px}.section-head{display:flex;align-items:end;justify-content:space-between;margin:19px 3px 9px}.section-head h2{font-size:17px;margin:0}.section-head button{border:0;background:none;color:var(--muted);font-size:12px}.card{padding:15px}.timeline{display:flex;flex-direction:column}.event{display:grid;grid-template-columns:52px 18px minmax(0,1fr);gap:7px;min-height:60px}.event time{font-size:12px;color:var(--muted);padding-top:3px}.rail{position:relative}.rail:before{content:"";position:absolute;left:8px;top:14px;bottom:-8px;width:1px;background:var(--line)}.event:last-child .rail:before{display:none}.dot{width:9px;height:9px;background:var(--text);border-radius:50%;position:absolute;left:4px;top:6px}.event-title{font-size:14px;font-weight:750}.event-sub{font-size:12px;color:var(--muted);margin-top:3px;white-space:normal;overflow-wrap:anywhere}.empty{text-align:center;padding:28px 10px;color:var(--muted);font-size:13px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{padding:13px 8px;text-align:center;background:var(--soft);border-radius:15px}.stat b{display:block;font-size:15px}.stat span{font-size:10px;color:var(--muted)}.list{display:flex;flex-direction:column;gap:8px}.row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px;background:var(--card);border:1px solid var(--line);border-radius:17px}.row-main{min-width:0}.row-title{font-size:14px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row-sub{font-size:11px;color:var(--muted);margin-top:3px}.amount{font-size:13px;font-weight:800;white-space:nowrap}.amount.expense{color:var(--danger)}.amount.income,.amount.saving,.amount.skip{color:var(--ok)}.tabs{display:flex;gap:6px;overflow:auto;padding:1px 0 10px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.chip{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:8px 12px;font-size:12px;white-space:nowrap}.chip.active{background:var(--text);color:var(--bg);border-color:var(--text)}.nav{position:fixed;z-index:30;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,720px);height:calc(70px + env(safe-area-inset-bottom));padding:7px 10px env(safe-area-inset-bottom);display:grid;grid-template-columns:repeat(4,1fr);background:var(--nav);backdrop-filter:blur(18px);border-top:1px solid var(--line)}.nav button{border:0;background:none;color:var(--muted);font-size:10px;font-weight:700;border-radius:13px}.nav button span{font-size:20px;display:block;line-height:25px}.nav button.active{color:var(--text);background:var(--soft)}.fab{position:fixed;z-index:35;right:max(18px,calc((100vw - 720px)/2 + 18px));bottom:calc(79px + env(safe-area-inset-bottom));width:56px;height:56px;border-radius:19px;border:0;background:var(--text);color:var(--bg);font-size:31px;box-shadow:0 12px 30px rgba(0,0,0,.22)}.backdrop{position:fixed;z-index:50;inset:0;background:rgba(0,0,0,.42);opacity:0;pointer-events:none;transition:.2s}.backdrop.show{opacity:1;pointer-events:auto}
-.sheet{position:fixed;z-index:60;left:50%;bottom:0;transform:translate(-50%,105%);width:min(100%,720px);max-height:calc(100dvh - max(10px,env(safe-area-inset-top)));overflow:auto;overscroll-behavior:contain;background:var(--card);border-radius:26px 26px 0 0;padding:10px 15px calc(20px + env(safe-area-inset-bottom));transition:.25s ease;scrollbar-width:thin}
-.sheet.show{transform:translate(-50%,0)}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-10px;z-index:3;background:var(--card);padding:8px 0 10px}
-.sheet-head h3{margin:0!important}.sheet-close{flex:0 0 auto;width:42px;height:42px;border:0;border-radius:50%;background:var(--soft);font-size:22px;font-weight:800}
-body.sheet-open{overflow:hidden}.handle{width:38px;height:4px;border-radius:99px;background:var(--line);margin:2px auto 13px}.sheet h3{margin:5px 2px 13px;font-size:19px}.type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.type{border:1px solid var(--line);background:var(--soft);border-radius:17px;padding:14px 10px;text-align:left;font-weight:750}.type.active{background:var(--text);color:var(--bg)}.form{margin-top:15px;display:grid;gap:11px}.field label{font-size:11px;color:var(--muted);font-weight:700;display:block;margin:0 0 6px 2px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:12px;outline:none}.field textarea{min-height:78px;resize:vertical}.form2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.primary{width:100%;border:0;background:var(--text);color:var(--bg);border-radius:16px;padding:14px;font-weight:800}.dangerbtn{border:1px solid var(--line);background:var(--card);color:var(--danger);border-radius:14px;padding:11px 13px}.settings-grid{display:grid;gap:9px}.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:17px}.setting input{width:125px;max-width:45%;border:0;background:var(--soft);padding:9px;border-radius:11px;text-align:right}.note{font-size:11px;color:var(--muted);line-height:1.5}.timerbox{text-align:center;padding:22px}.timer{font-size:42px;font-weight:850;letter-spacing:-2px}.timer-actions{display:flex;gap:8px;justify-content:center;margin-top:15px}.timer-actions button{border:0;border-radius:14px;padding:11px 16px;background:var(--soft);font-weight:800}.timer-actions .go{background:var(--text);color:var(--bg)}
-@media(max-width:380px){.app{padding-left:10px;padding-right:10px}.top h1{font-size:21px}.money{font-size:27px}.hero{padding:15px}.card{padding:12px}.grid2{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.event{grid-template-columns:45px 15px minmax(0,1fr);gap:5px}.fab{right:13px}.nav{padding-left:6px;padding-right:6px}.type-grid{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}.sheet{padding-left:11px;padding-right:11px}}
-@media(max-width:300px){.stats{grid-template-columns:1fr}.nav button{font-size:9px}.nav button span{font-size:18px}.type-grid{grid-template-columns:1fr}.top{padding-top:12px}.money{font-size:24px}}
-@media(max-width:380px){
-  .sheet{left:6px;right:6px;width:auto;transform:translateY(105%);border-radius:24px 24px 0 0;padding-left:12px;padding-right:12px}
-  .sheet.show{transform:translateY(0)}
-  .sheet .type-grid{grid-template-columns:1fr 1fr}
-  .sheet .form2{grid-template-columns:1fr}
-  .sheet .field input,.sheet .field select,.sheet .field textarea{font-size:16px}
-}
-@media(max-height:650px){
-  .sheet{max-height:100dvh;border-radius:20px 20px 0 0}
-  .handle{margin-bottom:7px}.sheet-head{padding-top:4px;padding-bottom:7px}
-  .type{padding:10px 9px}.form{margin-top:10px;gap:8px}
-  .field textarea{min-height:58px}.primary{padding:12px}
-}
-
-<style>
-.cal-week,.cal-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
-.cal-week{margin-bottom:7px;color:var(--muted);font-size:11px;text-align:center}
-.cal-day{aspect-ratio:1/1;border:0;background:transparent;border-radius:13px;position:relative;min-width:0}
-.cal-day.has{background:var(--soft)}.cal-day.selected{background:var(--text);color:var(--bg)}
-.cal-day i{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--danger);bottom:7px;left:50%;transform:translateX(-50%)}
-.cal-day.selected i{background:var(--bg)}
-@media(max-width:330px){.cal-week,.cal-days{gap:2px}.cal-day{border-radius:10px;font-size:12px}}
+:root{--bg:#f4f4ef;--card:#fff;--ink:#171715;--muted:#77776f;--line:#e4e4dc;--soft:#ecece5;--red:#9d4942;--green:#315a45}
+*{box-sizing:border-box}body{margin:0;background:#dcdcd5;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:var(--ink)}.app{width:min(100%,440px);min-height:100vh;margin:auto;background:var(--bg);padding:20px 16px 100px}.top{display:flex;justify-content:space-between;align-items:center}.logo{font-size:24px;font-weight:900}.sub,.muted{font-size:11px;color:var(--muted)}
+nav{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;background:#e8e8e1;padding:4px;border-radius:15px;margin:18px 0}nav button{border:0;background:none;padding:9px 2px;border-radius:11px;font-size:11px;font-weight:800;color:#777}nav button.on{background:#fff;color:#111}.page{display:none}.page.on{display:block}
+.hero{background:var(--ink);color:#fff;border-radius:25px;padding:21px;margin-bottom:10px}.hero small{opacity:.65}.big{font-size:33px;font-weight:900;letter-spacing:-1.5px;margin:4px 0}.hero p{font-size:11px;opacity:.7;margin:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.card{background:#fff;border:1px solid var(--line);border-radius:19px;padding:15px}.label{font-size:11px;color:var(--muted)}.val{font-size:18px;font-weight:900;margin-top:5px}h3{font-size:16px;margin:21px 3px 9px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee;font-size:12px}.row:last-child{border:0}.row b{font-size:13px}.pos{color:var(--green)}.neg{color:var(--red)}.btn{border:0;border-radius:14px;padding:13px;font-weight:850}.dark{background:var(--ink);color:#fff}.light{background:var(--soft);color:var(--ink)}.wide{width:100%}.twobtn{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.monthnav{display:flex;justify-content:space-between;align-items:center;margin:5px 3px 12px}.monthnav button{border:0;background:none;font-size:21px}.cal{background:#fff;border:1px solid var(--line);border-radius:20px;padding:12px}.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.week div{text-align:center;font-size:9px;color:#999;padding:5px}.day{height:48px;padding:5px;border-radius:10px;font-size:10px;cursor:pointer}.day.has{background:#efefe9}.dots{font-size:8px;margin-top:7px}.sDot{color:var(--green)}.eDot{color:var(--red)}
+.entry{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #eee}.entry:last-child{border:0}.emoji{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center}.grow{flex:1}.grow b{display:block;font-size:13px}.grow span,.tiny{font-size:10px;color:var(--muted)}.amount{font-weight:900;font-size:12px;text-align:right}.actions{display:flex;gap:7px;justify-content:flex-end;margin-top:5px}.mini{border:0;background:#eee;border-radius:8px;padding:4px 7px;font-size:9px}
+.bar{height:8px;background:#eee;border-radius:9px;overflow:hidden;margin-top:9px}.bar i{display:block;height:100%;background:var(--ink)}.chart{height:150px;display:flex;align-items:end;gap:7px;padding-top:18px}.col{flex:1;text-align:center;font-size:9px;color:#777}.stick{width:75%;margin:0 auto 5px;background:#1b1b18;border-radius:7px 7px 2px 2px;min-height:3px}
+.form label{display:block;font-size:11px;color:#666;margin:12px 2px 5px}.form input,.form select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px}.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.seg button{border:1px solid var(--line);background:#fff;padding:11px;border-radius:12px;font-weight:800}.seg button.on{background:#181816;color:#fff}.notice{padding:12px;border-radius:13px;background:#efefe8;font-size:11px;line-height:1.6;margin:10px 0}.danger{color:var(--red)}
+.fab{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:min(calc(100% - 32px),408px);display:grid;grid-template-columns:1fr 1fr;gap:8px}.fab button{box-shadow:0 7px 22px #0002}.modal{display:none;position:fixed;inset:0;background:#0008;align-items:flex-end;justify-content:center;z-index:5}.sheet{width:min(100%,440px);max-height:90vh;overflow:auto;background:#f9f9f5;border-radius:27px 27px 0 0;padding:21px 18px 30px}.sheet h2{margin:0 0 4px}.x{float:right;border:0;background:#eee;border-radius:50%;width:31px;height:31px}
 </style>
-
 <style>
-/* UI recovery patch: preserve original v3 layout, only fix the + sheet */
-@media (max-width: 480px){
-  .sheet{
-    left:0!important; right:0!important; bottom:0!important;
-    width:100%!important; max-width:none!important;
-    max-height:92dvh!important;
-    transform:translateY(105%)!important;
-    border-radius:24px 24px 0 0!important;
-    padding:8px 14px calc(18px + env(safe-area-inset-bottom))!important;
-    overflow-y:auto!important; overflow-x:hidden!important;
-    overscroll-behavior:contain;
-    box-sizing:border-box;
-  }
-  .sheet.show{transform:translateY(0)!important}
-  .sheet .type-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
-  .sheet .form2{grid-template-columns:1fr!important}
-  .sheet input,.sheet select,.sheet textarea{width:100%!important;min-width:0!important;box-sizing:border-box!important;font-size:16px!important}
-}
-@media (max-width: 340px), (max-height: 620px){
-  .sheet{
-    height:100dvh!important;max-height:100dvh!important;
-    border-radius:0!important;
-    padding-top:max(8px,env(safe-area-inset-top))!important;
-  }
-}
+/* v5 UI를 그대로 확장한 생활기록 영역 */
+.recordTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--soft);padding:4px;border-radius:15px;margin-bottom:12px}
+.recordTabs button{border:0;background:transparent;border-radius:11px;padding:10px 2px;font-size:10px;font-weight:850;color:var(--muted)}
+.recordTabs button.on{background:#fff;color:var(--ink)}
+.recordPane{display:none}.recordPane.on{display:block}
+.timerCard{text-align:center;padding:24px 15px}.timerStatus{font-size:12px;color:var(--muted)}
+.timerClock{font-size:42px;font-weight:950;letter-spacing:-2px;margin:8px 0 17px}
+.timerCtl{display:grid;grid-template-columns:1fr auto;gap:8px}.timerCtl select{min-width:0}
+.timerCtl button{min-width:88px}
+.emptyBox{min-height:145px;display:grid;place-items:center;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+.timeEntry{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #eee}.timeEntry:last-child{border-bottom:0}
+.timeIcon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex:0 0 auto}
+.timeBody{flex:1;min-width:0}.timeBody b{display:block;font-size:13px}.timeBody span{font-size:10px;color:var(--muted)}
+.bubbleWrap{min-height:280px}.bubbleMsg{width:78%;margin:0 0 10px auto;background:#ece8ff;border-radius:18px 18px 5px 18px;padding:13px;font-size:13px}
+.bubbleMsg small{display:block;color:#888;margin-top:7px;font-size:9px}.bubbleMsg button{border:0;background:transparent;color:#777;padding:0 2px;font-size:9px}
+.recordCal .day.selected{background:var(--ink);color:#fff}.recordCal .day.selected .rDot{color:#b8aaff}
+.rDot{color:#6655d8}.recordSummary{margin-top:12px}
+.recordForm .twocol{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.recordForm textarea{width:100%;min-height:100px;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;resize:vertical}
+@media(max-width:370px){nav button{font-size:10px}.timerClock{font-size:36px}}
+
+.switch{position:relative;width:48px;height:28px;flex:0 0 48px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;inset:0;background:#ddd;border-radius:99px;transition:.2s}
+.slider:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 4px #0002}
+.switch input:checked+.slider{background:var(--ink)}
+.switch input:checked+.slider:before{transform:translateX(20px)}
+nav{overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
 </style>
-
 <style>
-/* Calendar UI v7 — fully isolated */
-#calendar .calendar-shell{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:14px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-#calendar .calendar-toolbar{
-  display:grid;
-  grid-template-columns:42px minmax(0,1fr) 42px;
+.menuBar{display:flex;align-items:center;gap:12px;margin:12px 0 18px}
+.hamburger{width:46px;height:46px;border:0;border-radius:14px;background:var(--ink);color:#fff;font-size:22px;font-weight:900}
+#currentPageTitle{font-size:16px}
+.drawerNav{position:fixed!important;z-index:120;left:0;top:0;bottom:0;width:min(78vw,300px);padding:28px 18px;background:#f7f7f2;display:flex!important;flex-direction:column;gap:7px;transform:translateX(-105%);transition:.22s;box-shadow:12px 0 35px #0002;border-radius:0 24px 24px 0}
+.drawerNav.open{transform:translateX(0)}
+.drawerNav button{width:100%;text-align:left;border:0;background:transparent;border-radius:14px;padding:15px 16px;font-weight:850;color:var(--muted)}
+.drawerNav button.on{background:#fff;color:var(--ink)}
+.menuBackdrop{display:none;position:fixed;inset:0;background:#0006;z-index:110}.menuBackdrop.open{display:block}
+.seg.three{grid-template-columns:repeat(3,1fr)}
+.fab{grid-template-columns:repeat(3,1fr)!important}
+.fab .btn{padding-left:5px;padding-right:5px;font-size:11px}
+.iDot{color:#356a53}.incomeAmt{color:#356a53!important}
+@media(max-width:370px){.drawerNav{width:84vw}.fab .btn{font-size:10px}}
+</style>
+<style>
+.recordTabs.twoTabs{grid-template-columns:repeat(2,1fr)}
+.subTabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--soft);padding:5px;border-radius:16px;margin:0 0 12px}
+.subTabs button{border:0;background:transparent;border-radius:12px;padding:12px 8px;font-weight:850;color:var(--muted)}
+.subTabs button.on{background:#fff;color:var(--ink);box-shadow:0 2px 10px #0000000b}
+.todayMode{display:none}.todayMode.on{display:block}
+.fab{grid-template-columns:1fr 1fr!important;display:none}
+.tDot{color:#5967d8}.bDot{color:#9b62c9}
+.dots{font-size:8px;line-height:9px;white-space:nowrap}
+.daySummary{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.daySummary span{background:var(--soft);border-radius:999px;padding:6px 9px;font-size:10px;font-weight:800}
+#dayDetail h4{margin:16px 0 7px;font-size:12px}
+.expenseChoice{grid-template-columns:1fr 1fr!important}
+</style>
+<style>
+.todayOnlyDate{display:flex;justify-content:space-between;align-items:center;background:var(--soft);border-radius:12px;padding:11px 12px;margin-bottom:12px;font-size:11px;color:var(--muted)}
+.todayOnlyDate b{color:var(--ink)}
+.historyFilter{padding-bottom:14px}
+.historyFilter input{margin-bottom:0!important}
+#rHistory .timeEntry:first-child{padding-top:2px}
+</style><style>
+.pageHeader{margin-top:8px;margin-bottom:20px}
+.pageHeader h1{margin:0;font-size:28px;line-height:1.15;letter-spacing:-1.2px;font-weight:950}
+</style><style>
+/* Truly minimal page header */
+.simpleHeader{
+  display:flex;
   align-items:center;
-  gap:8px;
-  margin-bottom:12px;
+  gap:14px;
+  height:52px;
+  margin:0 0 18px;
+  padding:0 2px;
+  background:transparent;
+  border:0;
+  box-shadow:none;
 }
-#calendar .calendar-toolbar button{
-  width:42px;height:42px;padding:0;margin:0;
-  border:1px solid var(--line);
-  border-radius:13px;
-  background:var(--soft);
-  color:var(--text);
-  font-size:22px;font-weight:800;
+.simpleHeader h1{
+  margin:0;
+  padding:0;
+  font-size:24px;
+  line-height:1;
+  letter-spacing:-.8px;
+  font-weight:900;
+  color:var(--ink);
 }
-#calendar .calendar-title{
-  min-width:0;text-align:center;font-size:18px;font-weight:900;
-  white-space:nowrap;
+.simpleMenu{
+  width:30px;
+  height:30px;
+  padding:5px 3px;
+  margin:0;
+  border:0;
+  border-radius:0;
+  background:transparent!important;
+  box-shadow:none!important;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
 }
-#calendar .calendar-date-jump{
-  display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;
-  gap:10px;margin-bottom:14px;padding:10px 11px;
-  background:var(--soft);border-radius:14px;
+.simpleMenu span{
+  display:block;
+  width:22px;
+  height:2px;
+  border-radius:2px;
+  background:var(--ink);
 }
-#calendar .calendar-date-jump label{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
-#calendar .calendar-date-jump input{
-  width:100%;min-width:0;box-sizing:border-box;
-  border:1px solid var(--line);border-radius:11px;
-  background:var(--card);color:var(--text);
-  padding:9px 10px;font:inherit;font-size:14px;
-}
-#calendar .calendar-weekdays,
-#calendar .calendar-days{
-  display:grid!important;
-  grid-template-columns:repeat(7,minmax(0,1fr))!important;
-  gap:4px!important;
-  width:100%;
-}
-#calendar .calendar-weekdays{margin-bottom:5px}
-#calendar .calendar-weekdays div{
-  text-align:center;font-size:11px;font-weight:800;color:var(--muted);
-  padding:5px 0;min-width:0;
-}
-#calendar .calendar-day,
-#calendar .calendar-blank{
-  min-width:0!important;width:100%!important;
-  aspect-ratio:1/1;
-}
-#calendar .calendar-day{
-  position:relative;display:flex;align-items:center;justify-content:center;
-  padding:0!important;margin:0!important;
-  border:0!important;border-radius:12px!important;
-  background:transparent!important;color:var(--text)!important;
-  font-size:13px;font-weight:700;
-}
-#calendar .calendar-day.has-data{background:var(--soft)!important}
-#calendar .calendar-day.is-today{outline:1px solid var(--accent)}
-#calendar .calendar-day.is-selected{
-  background:var(--text)!important;color:var(--bg)!important;
-}
-#calendar .calendar-dot{
-  position:absolute;left:50%;bottom:5px;transform:translateX(-50%);
-  width:4px;height:4px;border-radius:50%;background:var(--danger);
-}
-#calendar .calendar-day.is-selected .calendar-dot{background:var(--bg)}
-#calendar .calendar-detail-title{margin:16px 2px 8px;font-size:15px;font-weight:900}
-#calendar .calendar-detail{
-  min-height:135px;
-}
-@media(max-width:380px){
-  #calendar .calendar-shell{padding:10px;border-radius:18px}
-  #calendar .calendar-toolbar{grid-template-columns:38px minmax(0,1fr) 38px;gap:5px}
-  #calendar .calendar-toolbar button{width:38px;height:38px}
-  #calendar .calendar-title{font-size:16px}
-  #calendar .calendar-days,#calendar .calendar-weekdays{gap:2px!important}
-  #calendar .calendar-day{border-radius:9px!important;font-size:12px}
-  #calendar .calendar-date-jump{grid-template-columns:1fr;gap:5px}
-}
-@media(max-width:300px){
-  #calendar .calendar-shell{padding:7px}
-  #calendar .calendar-day{font-size:11px}
-  #calendar .calendar-weekdays div{font-size:9px}
+.menuBar,.pageHeader{display:none!important}
+@media(max-width:370px){
+  .simpleHeader{height:48px;margin-bottom:14px}
+  .simpleHeader h1{font-size:22px}
 }
 </style>
-
+<style>
+/* v11: page title is the only visible header content */
+.titleOnlyHeader{
+  display:block;
+  margin:6px 0 22px;
+  padding:0;
+  height:auto;
+  background:transparent;
+  border:0;
+  box-shadow:none;
+}
+.titleOnlyHeader h1{
+  margin:0;
+  padding:0;
+  font-size:28px;
+  line-height:1.2;
+  letter-spacing:-1.2px;
+  font-weight:950;
+  color:var(--ink);
+}
+/* Menu control is intentionally separate from the header title */
+.floatingMenu{
+  position:fixed;
+  z-index:105;
+  left:16px;
+  right:auto;
+  top:14px;
+  width:34px;
+  height:34px;
+  padding:6px;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:4px;
+}
+.floatingMenu span{
+  display:block;
+  width:21px;
+  height:2px;
+  background:var(--ink);
+  border-radius:2px;
+}
+.simpleHeader,.simpleMenu,.menuBar,.pageHeader,.hamburger{display:none!important}
+.switch,.slider,{display:none!important}
+</style>
 
 <style>
-#entryDate,#calendarDateInput{
-  position:relative!important;
-  z-index:1!important;
-  pointer-events:auto!important;
-  -webkit-user-select:text!important;
-  user-select:text!important;
-  touch-action:manipulation!important;
+/* v12 refinements */
+.recordSwitcher{padding:10px!important;overflow:hidden}
+.embeddedTabs{margin:0 0 10px!important}
+.recordSwitcher .todayMode{margin:0}
+.recordSwitcher .timerInner{padding:28px 20px 20px;text-align:center}
+.recordSwitcher .embeddedForm{padding:10px 10px 14px}
+.recordSwitcher .embeddedForm.card,.recordSwitcher .timerCard{border:0!important;box-shadow:none!important;background:transparent!important}
+.dataActions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+#settingsPage>h3:first-child{margin-top:4px}
+@media(max-width:420px){
+  .dataActions{grid-template-columns:1fr}
 }
 </style>
 
 <style>
-#entryDate,#calendarDateInput{
-  cursor:text!important;
-  caret-color:var(--text)!important;
-  -webkit-tap-highlight-color:rgba(0,0,0,.08);
-}
-#entryDate:focus,#calendarDateInput:focus{
-  outline:2px solid var(--accent)!important;
-  outline-offset:1px;
-}
+.timerStartRow{text-align:left;margin:0 0 12px}.timerStartRow label{display:block;font-size:13px;color:var(--muted);font-weight:800;margin-bottom:7px}.timerStartRow label span{font-weight:600;font-size:11px}.timerStartRow input{width:100%;box-sizing:border-box;border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px 14px;font:inherit;color:var(--ink)}.timerStartRow input:disabled{opacity:.55}.titleOnlyHeader{padding-left:52px!important}
+@media(max-width:370px){.recordSwitcher .timerInner{padding:22px 10px 16px}.timerCtl{grid-template-columns:minmax(0,1fr) auto!important}.timerCtl .btn{padding-left:16px;padding-right:16px}}
 </style>
-</head>
-<body>
-<div class="app">
-  <header class="top"><div><div class="eyebrow" id="dateLabel"></div><h1 id="pageTitle">오늘</h1></div><button class="iconbtn" id="themeBtn" aria-label="테마 변경">◐</button></header>
 
-  <main>
-    <section id="home" class="view active">
-      <div class="hero">
-        <small>이번 달 남은 생활비</small><div class="money" id="remainMoney">0원</div>
-        <div class="grid2"><div class="mini"><span>오늘 사용 가능</span><b id="todayBudget">0원</b></div><div class="mini"><span>이번 달 지출</span><b id="monthExpense">0원</b></div></div>
-        <div class="pace" id="paceText">예산을 설정해 주세요.</div><div class="progress"><i id="budgetBar" style="width:0%"></i></div>
-      </div>
-      <div class="section-head"><h2>오늘의 시간</h2><span class="muted" id="todayTimeTotal">0분</span></div><div class="card"><div class="stats" id="timeStats"></div></div>
-      <div class="section-head"><h2>오늘 타임라인</h2><button data-nav="timeline">전체 보기</button></div><div class="card timeline data-zone" id="homeTimeline"></div>
-    </section>
+<style>
+.themeChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.themeChoices button{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:11px 5px;font-weight:850}
+.themeChoices button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
-    <section id="timeline" class="view">
-      <div class="card timerbox"><div class="muted">빠른 타이머</div><div class="timer" id="timerText">00:00:00</div><div class="timer-actions"><button class="go" id="timerStart">시작</button><button id="timerSave">종료·저장</button></div></div>
-      <div class="section-head"><h2>기록</h2><button id="clearTimeline">전체 삭제</button></div><div class="card timeline data-zone" id="timelineList"></div>
-    </section>
-
-    <section id="moneyView" class="view">
-      <div class="hero"><small>이번 달 남은 생활비</small><div class="money" id="moneyRemain2">0원</div><div class="stats"><div class="stat"><b id="sumExpense">0원</b><span>지출</span></div><div class="stat"><b id="sumSaving">0원</b><span>저축</span></div><div class="stat"><b id="sumSkip">0원</b><span>안 삼</span></div></div></div>
-      <div class="tabs" id="moneyTabs"><button class="chip active" data-filter="all">전체</button><button class="chip" data-filter="expense">지출</button><button class="chip" data-filter="income">수입</button><button class="chip" data-filter="saving">저축</button><button class="chip" data-filter="skip">안 삼</button></div>
-      <div class="list" id="moneyList"></div>
-    </section>
-
-
-    <section id="calendar" class="view">
-      <div class="calendar-shell">
-        <div class="calendar-toolbar">
-          <button id="calPrev" type="button" aria-label="이전 달">‹</button>
-          <div class="calendar-title" id="calMonthTitle">달력</div>
-          <button id="calNext" type="button" aria-label="다음 달">›</button>
-        </div>
-        <div class="calendar-date-jump">
-          <label for="calendarDateInput">날짜 선택</label>
-          <input type="text" id="calendarDateInput" inputmode="tel" pattern="[0-9. -]*" maxlength="10" autocomplete="off" placeholder="2026. 10. 06">
-        </div>
-        <div class="calendar-weekdays">
-          <div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div>
-        </div>
-        <div class="calendar-days" id="calendarGrid"></div>
-      </div>
-      <div class="calendar-detail-title" id="selectedDateTitle">선택한 날짜</div>
-      <div class="card timeline data-zone calendar-detail" id="calendarDayList"></div>
-    </section>
-
-    <section id="more" class="view">
-      <div class="section-head"><h2>예산 설정</h2></div><div class="settings-grid"><div class="setting"><div><b>월 생활비</b><div class="note">지출 페이스와 오늘 사용 가능 금액 계산에 사용</div></div><input id="budgetInput" type="number" min="0" inputmode="numeric"></div><button class="primary" id="saveBudget">저장</button></div>
-      <div class="section-head"><h2>데이터</h2></div><div class="settings-grid"><button class="setting" id="exportBtn"><span>백업 파일 내보내기</span><b>›</b></button><label class="setting"><span>백업 파일 불러오기</span><b>›</b><input id="importInput" type="file" accept="application/json" hidden></label><button class="setting" id="resetBtn"><span style="color:var(--danger)">모든 데이터 초기화</span><b>›</b></button></div>
-      <p class="note">데이터는 이 브라우저의 localStorage에 저장됩니다. 브라우저 데이터 삭제나 기기 변경에 대비해 가끔 백업해 주세요.</p>
-    </section>
-  </main>
-</div>
-<button class="fab" id="fab" aria-label="새 기록">＋</button>
-<nav class="nav" style="grid-template-columns:repeat(5,1fr)"><button class="active" data-nav="home"><span>⌂</span>홈</button><button data-nav="timeline"><span>◷</span>타임라인</button><button data-nav="moneyView"><span>₩</span>돈</button><button data-nav="calendar"><span>▦</span>달력</button><button data-nav="more"><span>☰</span>더보기</button></nav>
-<div class="backdrop" id="backdrop"></div>
-<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="새 기록"><div class="handle"></div><div class="sheet-head"><h3>새 기록</h3><button class="sheet-close" id="sheetClose" type="button" aria-label="닫기">×</button></div><div class="type-grid" id="typeGrid"><button class="type active" data-type="time">⏱ 시간</button><button class="type" data-type="bubble">💬 버블</button><button class="type" data-type="expense">💸 지출</button><button class="type" data-type="income">💰 수입</button><button class="type" data-type="saving">🏦 저축</button><button class="type" data-type="skip">🛍 안 삼</button></div>
-<form class="form" id="entryForm"><div class="field"><label>내용</label><input id="titleInput" required placeholder="무엇을 기록할까요?"></div><div id="timeFields" class="form2"><div class="field"><label>시작</label><input id="startInput" type="datetime-local"></div><div class="field"><label>종료</label><input id="endInput" type="datetime-local"></div></div><div id="moneyFields" class="field" hidden><label>금액</label><input id="amountInput" type="number" min="0" inputmode="numeric" placeholder="0"></div><div class="field"><label>메모</label><textarea id="memoInput" placeholder="선택 사항"></textarea></div><button class="primary" type="submit">저장</button></form></section>
-<script>
-const KEY='life_v1_data';
-const defaultData={budget:700000,entries:[],theme:'light'};
-let data=JSON.parse(localStorage.getItem(KEY)||'null')||defaultData; data={...defaultData,...data,entries:Array.isArray(data.entries)?data.entries:[]};
-let currentType='time', moneyFilter='all', timerStarted=null, timerInterval=null; let calCursor=new Date(), selectedDay='';
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const won=n=>Math.round(Number(n)||0).toLocaleString('ko-KR')+'원';
-const pad=n=>String(n).padStart(2,'0');
-const localISO=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-const dayKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const sameMonth=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth();
-selectedDay=dayKey(new Date());
-function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
-function applyTheme(){document.documentElement.dataset.theme=data.theme==='dark'?'dark':'';document.querySelector('meta[name="theme-color"]').content=data.theme==='dark'?'#0e0e0e':'#f5f5f3'}
-function render(){applyTheme();const now=new Date();$('#dateLabel').textContent=new Intl.DateTimeFormat('ko-KR',{month:'long',day:'numeric',weekday:'long'}).format(now);$('#budgetInput').value=data.budget||'';
- const month=data.entries.filter(e=>e.type==='expense'&&sameMonth(new Date(e.date),now)); const exp=month.reduce((s,e)=>s+(+e.amount||0),0); const remain=Math.max(0,(+data.budget||0)-exp); const days=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(); const elapsed=Math.max(0,now.getDate()-1); const expected=(+data.budget||0)*(elapsed/days); const diff=expected-exp; const leftDays=Math.max(1,days-now.getDate()+1); const today=Math.max(0,remain/leftDays);
- $('#remainMoney').textContent=$('#moneyRemain2').textContent=won(remain); $('#todayBudget').textContent=won(today); $('#monthExpense').textContent=won(exp); $('#budgetBar').style.width=Math.min(100,data.budget?exp/data.budget*100:0)+'%'; const p=$('#paceText'); p.className='pace '+(diff>=0?'ok':'bad'); p.textContent=data.budget?(diff>=0?`권장 페이스보다 ${won(diff)} 여유 있어요.`:`권장 페이스보다 ${won(Math.abs(diff))} 더 썼어요. 아껴 써야 해요!`):'월 생활비를 설정해 주세요.';
- renderTimeline();renderMoney();renderStats();renderCalendar();}
-function renderStats(){const now=new Date(), today=dayKey(now); const arr=data.entries.filter(e=>['time'].includes(e.type)&&dayKey(new Date(e.date))===today); const mins=arr.reduce((s,e)=>s+(e.minutes||0),0); $('#todayTimeTotal').textContent=mins>=60?`${Math.floor(mins/60)}시간 ${mins%60}분`:`${mins}분`; const groups={};arr.forEach(e=>groups[e.title]=(groups[e.title]||0)+(e.minutes||0)); const items=Object.entries(groups).sort((a,b)=>b[1]-a[1]).slice(0,6); $('#timeStats').innerHTML=items.length?items.map(([k,v])=>`<div class="stat"><b>${v>=60?Math.floor(v/60)+'h '+v%60+'m':v+'m'}</b><span>${esc(k)}</span></div>`).join(''):'<div class="empty" style="grid-column:1/-1">데이터 없음<br><small>오늘 기록한 시간이 없어요.</small></div>'}
-function renderTimeline(){const sorted=[...data.entries].sort((a,b)=>new Date(b.date)-new Date(a.date)); const html=arr=>arr.length?arr.map(e=>{const d=new Date(e.date); const sub=e.type==='time'?`${e.minutes||0}분${e.memo?' · '+esc(e.memo):''}`:e.type==='bubble'?(esc(e.memo)||'메모'): `${label(e.type)} · ${won(e.amount)}${e.memo?' · '+esc(e.memo):''}`;return `<div class="event"><time>${pad(d.getHours())}:${pad(d.getMinutes())}</time><div class="rail"><i class="dot"></i></div><div><div class="event-title">${esc(e.title)}</div><div class="event-sub">${sub}</div></div></div>`}).join(''):'<div class="empty">데이터 없음<br><small>+ 버튼으로 첫 기록을 추가해 보세요.</small></div>'; $('#timelineList').innerHTML=html(sorted); const today=dayKey(new Date());$('#homeTimeline').innerHTML=html(sorted.filter(e=>dayKey(new Date(e.date))===today).slice(0,6))}
-function renderMoney(){const now=new Date();const all=data.entries.filter(e=>['expense','income','saving','skip'].includes(e.type)&&sameMonth(new Date(e.date),now)).sort((a,b)=>new Date(b.date)-new Date(a.date)); const sum=t=>all.filter(e=>e.type===t).reduce((s,e)=>s+(+e.amount||0),0);$('#sumExpense').textContent=won(sum('expense'));$('#sumSaving').textContent=won(sum('saving'));$('#sumSkip').textContent=won(sum('skip'));const arr=moneyFilter==='all'?all:all.filter(e=>e.type===moneyFilter);$('#moneyList').innerHTML=arr.length?arr.map(e=>{const d=new Date(e.date);return `<div class="row"><div class="row-main"><div class="row-title">${esc(e.title)}</div><div class="row-sub">${d.getMonth()+1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())} · ${label(e.type)}</div></div><div class="amount ${e.type}">${e.type==='expense'?'-':'+'}${won(e.amount)}</div></div>`}).join(''):'<div class="empty">데이터 없음<br><small>해당하는 기록이 아직 없어요.</small></div>'}
-
-
-function dateTextFromISO(iso){
- const p=(iso||'').split('-');
- return p.length===3?`${p[0]}. ${p[1]}. ${p[2]}`:'';
+/* Dark theme overrides */
+html[data-theme="dark"]{
+ --bg:#111214;--ink:#f5f5f2;--muted:#9b9ca2;--soft:#202126;--line:#303138;
 }
-function dateISOFromText(raw){
- const n=(raw||'').replace(/\D/g,'').slice(0,8);
- if(n.length!==8)return null;
- const y=+n.slice(0,4),m=+n.slice(4,6),d=+n.slice(6,8);
- const x=new Date(y,m-1,d);
- if(x.getFullYear()!==y||x.getMonth()!==m-1||x.getDate()!==d)return null;
- return `${y}-${pad(m)}-${pad(d)}`;
-}
-function dateMask(raw){
- const n=(raw||'').replace(/\D/g,'').slice(0,8);
- if(n.length<=4)return n;
- if(n.length<=6)return `${n.slice(0,4)}. ${n.slice(4)}`;
- return `${n.slice(0,4)}. ${n.slice(4,6)}. ${n.slice(6)}`;
-}
-
-function renderCalendar(){
- const y=calCursor.getFullYear(), m=calCursor.getMonth();
- const first=new Date(y,m,1), last=new Date(y,m+1,0), today=dayKey(new Date());
- $('#calMonthTitle').textContent=`${y}년 ${m+1}월`;
- let cells='';
- for(let i=0;i<first.getDay();i++) cells+='<span class="calendar-blank" aria-hidden="true"></span>';
- for(let d=1;d<=last.getDate();d++){
-   const key=`${y}-${pad(m+1)}-${pad(d)}`;
-   const has=data.entries.some(e=>dayKey(new Date(e.date))===key);
-   cells+=`<button type="button" class="calendar-day ${has?'has-data':''} ${today===key?'is-today':''} ${selectedDay===key?'is-selected':''}" data-day="${key}"><span>${d}</span>${has?'<i class="calendar-dot"></i>':''}</button>`;
+html[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .drawerNav,
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] .subTabs button.on,
+html[data-theme="dark"] .recordTabs button.on{background:#18191d!important;color:var(--ink);border-color:var(--line)}
+html[data-theme="dark"] .drawerNav{background:#141519!important}
+html[data-theme="dark"] .timeEntry{border-color:var(--line)}
+html[data-theme="dark"] .bubbleMsg{background:#292536}
+html[data-theme="dark"] .slider:before{background:#eee}
+html[data-theme="dark"] .simpleMenu span,
+html[data-theme="dark"] .floatingMenu span{background:var(--ink)}
+@media(prefers-color-scheme:dark){
+ html[data-theme="system"]{
+  --bg:#111214;--ink:#f5f5f2;--muted:#9b9ca2;--soft:#202126;--line:#303138;
  }
- $('#calendarGrid').innerHTML=cells;
- $('#calendarGrid').querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{
-   selectedDay=b.dataset.day;
-   renderCalendar();
- }));
- $('#calendarDateInput').value=dateTextFromISO(selectedDay);
- $('#selectedDateTitle').textContent=selectedDay+' 기록';
- const arr=[...data.entries].filter(e=>dayKey(new Date(e.date))===selectedDay).sort((a,b)=>new Date(a.date)-new Date(b.date));
- $('#calendarDayList').innerHTML=arr.length?arr.map(e=>{
-   const d=new Date(e.date);
-   const sub=e.type==='time'?`${e.minutes||0}분${e.memo?' · '+esc(e.memo):''}`:e.type==='bubble'?(esc(e.memo)||'버블'):`${label(e.type)} · ${won(e.amount)}${e.memo?' · '+esc(e.memo):''}`;
-   return `<div class="event"><time>${pad(d.getHours())}:${pad(d.getMinutes())}</time><div class="rail"><i class="dot"></i></div><div><div class="event-title">${esc(e.title)}</div><div class="event-sub">${sub}</div></div></div>`;
- }).join(''):'<div class="empty"><div><b>데이터 없음</b><br><small>이 날짜에는 기록이 없어요.</small></div></div>';
+ html[data-theme="system"] body{background:var(--bg);color:var(--ink)}
+ html[data-theme="system"] .card,
+ html[data-theme="system"] .drawerNav,
+ html[data-theme="system"] input,
+ html[data-theme="system"] select,
+ html[data-theme="system"] textarea,
+ html[data-theme="system"] .subTabs button.on,
+ html[data-theme="system"] .recordTabs button.on{background:#18191d!important;color:var(--ink);border-color:var(--line)}
+ html[data-theme="system"] .drawerNav{background:#141519!important}
+ html[data-theme="system"] .timeEntry{border-color:var(--line)}
+ html[data-theme="system"] .bubbleMsg{background:#292536}
 }
-$('#calPrev').onclick=()=>{calCursor=new Date(calCursor.getFullYear(),calCursor.getMonth()-1,1);renderCalendar()};
-$('#calNext').onclick=()=>{calCursor=new Date(calCursor.getFullYear(),calCursor.getMonth()+1,1);renderCalendar()};
-$('#calendarDateInput').addEventListener('input',e=>{e.target.value=dateMask(e.target.value)});
-$('#calendarDateInput').addEventListener('blur',e=>{
- const iso=dateISOFromText(e.target.value);
- if(!iso){e.target.value=dateTextFromISO(selectedDay);return;}
- selectedDay=iso;
- const d=new Date(iso+'T12:00:00');
- calCursor=new Date(d.getFullYear(),d.getMonth(),1);
- renderCalendar();
-});
-$('#calendarDateInput').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur()});
-function label(t){return({time:'시간',bubble:'버블',expense:'지출',income:'수입',saving:'저축',skip:'안 삼'})[t]||t} function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
-function navigate(id){$$('.view').forEach(v=>v.classList.toggle('active',v.id===id));$$('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===id));$('#pageTitle').textContent=({home:'오늘',timeline:'타임라인',moneyView:'돈 관리',calendar:'달력',more:'더보기'})[id];window.scrollTo(0,0)}
-$$('[data-nav]').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.nav)));
-function openSheet(){const n=new Date(); if($('#entryDate')) $('#entryDate').value=dateTextFromISO(`${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`);$('#startInput').value=localISO(n);$('#endInput').value=localISO(new Date(n.getTime()+30*60000));$('#sheet').classList.add('show');$('#backdrop').classList.add('show');document.body.classList.add('sheet-open')} function closeSheet(){$('#sheet').classList.remove('show');$('#backdrop').classList.remove('show');document.body.classList.remove('sheet-open')}
-$('#fab').onclick=openSheet;$('#backdrop').onclick=closeSheet;$('#sheetClose').onclick=closeSheet;
-$$('.type').forEach(b=>b.onclick=()=>{currentType=b.dataset.type;$$('.type').forEach(x=>x.classList.toggle('active',x===b));$('#timeFields').hidden=currentType!=='time';$('#moneyFields').hidden=!['expense','income','saving','skip'].includes(currentType)});
-$('#entryForm').onsubmit=e=>{e.preventDefault();const title=$('#titleInput').value.trim();if(!title)return;let date=new Date(), minutes=0;if(currentType==='time'){const s=new Date($('#startInput').value),en=new Date($('#endInput').value);if(!isFinite(s)||!isFinite(en)||en<=s){alert('종료 시간은 시작 시간보다 늦어야 해요.');return}date=s;minutes=Math.round((en-s)/60000)}const item={id:crypto.randomUUID?crypto.randomUUID():Date.now()+'',type:currentType,title,date:date.toISOString(),memo:$('#memoInput').value.trim()};if(currentType==='time')item.minutes=minutes;if(['expense','income','saving','skip'].includes(currentType))item.amount=Number($('#amountInput').value)||0;data.entries.push(item);$('#entryForm').reset();closeSheet();save()};
-$('#themeBtn').onclick=()=>{data.theme=data.theme==='dark'?'light':'dark';save()};$('#saveBudget').onclick=()=>{data.budget=Math.max(0,Number($('#budgetInput').value)||0);save()};
-$('#moneyTabs').onclick=e=>{const b=e.target.closest('[data-filter]');if(!b)return;moneyFilter=b.dataset.filter;$$('#moneyTabs .chip').forEach(x=>x.classList.toggle('active',x===b));renderMoney()};
-$('#clearTimeline').onclick=()=>{if(confirm('모든 기록을 삭제할까요?')){data.entries=[];save()}};$('#resetBtn').onclick=()=>{if(confirm('예산과 기록을 모두 초기화할까요?')){data={...defaultData,entries:[]};save()}};
-$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='life-backup-'+dayKey(new Date())+'.json';a.click();URL.revokeObjectURL(a.href)};
-$('#importInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!Array.isArray(obj.entries))throw 0;data={...defaultData,...obj};save();alert('백업을 불러왔어요.')}catch{alert('올바른 백업 파일이 아니에요.')}e.target.value=''};
-$('#timerStart').onclick=()=>{if(timerStarted){clearInterval(timerInterval);timerInterval=null;$('#timerStart').textContent='계속';timerStarted._paused=Date.now();return}timerStarted=new Date();$('#timerStart').textContent='일시정지';timerInterval=setInterval(updateTimer,250)};
-function updateTimer(){if(!timerStarted)return;const sec=Math.floor((Date.now()-timerStarted.getTime())/1000);$('#timerText').textContent=`${pad(Math.floor(sec/3600))}:${pad(Math.floor(sec%3600/60))}:${pad(sec%60)}`}
-$('#timerSave').onclick=()=>{if(!timerStarted)return alert('타이머를 먼저 시작해 주세요.');clearInterval(timerInterval);const mins=Math.max(1,Math.round((Date.now()-timerStarted.getTime())/60000));const title=prompt('무엇을 한 시간이었나요?','집중')||'타이머';data.entries.push({id:Date.now()+'',type:'time',title,date:timerStarted.toISOString(),minutes:mins,memo:'타이머 기록'});timerStarted=null;$('#timerText').textContent='00:00:00';$('#timerStart').textContent='시작';save()};
-render();
+</style>
+
+<script>
+const THEME_KEY='daesinsam_theme_v1';
+function setTheme(mode){
+  if(!['system','light','dark'].includes(mode)) mode='system';
+  localStorage.setItem(THEME_KEY,mode);
+  applyTheme(mode);
+}
+function applyTheme(mode){
+  document.documentElement.setAttribute('data-theme',mode);
+  document.querySelectorAll('[data-theme-choice]').forEach(b=>b.classList.toggle('on',b.dataset.themeChoice===mode));
+}
+(function(){
+  const mode=localStorage.getItem(THEME_KEY)||'system';
+  document.documentElement.setAttribute('data-theme',mode);
+  window.addEventListener('DOMContentLoaded',()=>applyTheme(mode));
+})();
 </script>
+
+<style>
+/* v18 — rebuilt dark theme (not a color inversion) */
+html[data-theme="dark"]{
+  --bg:#101113;
+  --card:#18191d;
+  --ink:#f4f4f1;
+  --muted:#a2a4aa;
+  --line:#303238;
+  --soft:#222329;
+  --red:#ff858b;
+  --green:#79cfa5;
+  color-scheme:dark;
+}
+html[data-theme="dark"] body{background:#0b0c0e!important;color:var(--ink)!important}
+html[data-theme="dark"] .app{background:var(--bg)!important}
+
+/* Surfaces */
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .cal,
+html[data-theme="dark"] .sheet,
+html[data-theme="dark"] .recordSwitcher,
+html[data-theme="dark"] .emptyBox{
+  background:var(--card)!important;
+  color:var(--ink)!important;
+  border-color:var(--line)!important;
+}
+html[data-theme="dark"] .hero{
+  background:#1b1c20!important;
+  color:#f7f7f4!important;
+  border:1px solid var(--line)!important;
+}
+html[data-theme="dark"] .hero small,
+html[data-theme="dark"] .hero p{color:#b4b6bb!important;opacity:1!important}
+html[data-theme="dark"] .hero .big{color:#fff!important}
+
+/* Typography */
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] b,
+html[data-theme="dark"] strong,
+html[data-theme="dark"] .val,
+html[data-theme="dark"] .amount,
+html[data-theme="dark"] .timerClock,
+html[data-theme="dark"] .timeBody b,
+html[data-theme="dark"] .grow b,
+html[data-theme="dark"] .row b,
+html[data-theme="dark"] label{color:#f4f4f1!important}
+html[data-theme="dark"] .label,
+html[data-theme="dark"] .muted,
+html[data-theme="dark"] .sub,
+html[data-theme="dark"] .tiny,
+html[data-theme="dark"] .timerStatus,
+html[data-theme="dark"] .timeBody span,
+html[data-theme="dark"] .grow span,
+html[data-theme="dark"] .bubbleMsg small,
+html[data-theme="dark"] .form label{color:#a2a4aa!important}
+
+/* Inputs */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea{
+  background:#1d1e22!important;
+  color:#f4f4f1!important;
+  border-color:#373940!important;
+  -webkit-text-fill-color:#f4f4f1!important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder{
+  color:#777a82!important;
+  -webkit-text-fill-color:#777a82!important;
+  opacity:1!important;
+}
+html[data-theme="dark"] option{background:#1d1e22!important;color:#f4f4f1!important}
+
+/* Buttons and segmented controls */
+html[data-theme="dark"] .btn.dark,
+html[data-theme="dark"] .seg button.on,
+html[data-theme="dark"] .subTabs button.on,
+html[data-theme="dark"] .recordTabs button.on,
+html[data-theme="dark"] .themeChoices button.on{
+  background:#f1f1ee!important;
+  color:#111214!important;
+  border-color:#f1f1ee!important;
+}
+html[data-theme="dark"] .btn.light,
+html[data-theme="dark"] .seg button,
+html[data-theme="dark"] .mini,
+html[data-theme="dark"] .themeChoices button{
+  background:#24252a!important;
+  color:#ecece9!important;
+  border-color:#3a3c43!important;
+}
+html[data-theme="dark"] .seg button:not(.on),
+html[data-theme="dark"] .subTabs button:not(.on),
+html[data-theme="dark"] .recordTabs button:not(.on){
+  color:#b7b9bf!important;
+}
+html[data-theme="dark"] .x{
+  background:#2a2b30!important;
+  color:#f4f4f1!important;
+}
+
+/* Rows / separators / notices */
+html[data-theme="dark"] .row,
+html[data-theme="dark"] .entry,
+html[data-theme="dark"] .timeEntry{border-color:#303238!important}
+html[data-theme="dark"] .notice,
+html[data-theme="dark"] .todayOnlyDate,
+html[data-theme="dark"] .daySummary span,
+html[data-theme="dark"] .recordTabs,
+html[data-theme="dark"] .subTabs{
+  background:#222329!important;
+  color:#c4c5ca!important;
+}
+html[data-theme="dark"] .emoji,
+html[data-theme="dark"] .timeIcon{background:#26272c!important;color:#fff!important}
+html[data-theme="dark"] .bubbleMsg{background:#2d2940!important;color:#f5f5f2!important}
+
+/* Calendar: keep the whole calendar dark instead of a white island */
+html[data-theme="dark"] .cal{background:#18191d!important}
+html[data-theme="dark"] .week div{color:#8f9299!important}
+html[data-theme="dark"] .day{color:#dedfdf!important}
+html[data-theme="dark"] .day.has{background:#28292f!important}
+html[data-theme="dark"] .recordCal .day.selected{
+  background:#f1f1ee!important;
+  color:#111214!important;
+}
+html[data-theme="dark"] .monthnav button{color:#f4f4f1!important}
+html[data-theme="dark"] .bar{background:#34353a!important}
+html[data-theme="dark"] .bar i,
+html[data-theme="dark"] .stick{background:#e9e9e6!important}
+
+/* Drawer */
+html[data-theme="dark"] .drawerNav{background:#15161a!important;border-right:1px solid #2e3036!important}
+html[data-theme="dark"] .drawerNav button{color:#b4b6bc!important}
+html[data-theme="dark"] .drawerNav button.on{background:#292a30!important;color:#fff!important}
+
+/* Meaning colors */
+html[data-theme="dark"] .neg{color:#ff858b!important}
+html[data-theme="dark"] .pos,
+html[data-theme="dark"] .incomeAmt{color:#79cfa5!important}
+html[data-theme="dark"] .danger{color:#ff858b!important}
+html[data-theme="dark"] .floatingMenu span{background:#f4f4f1!important}
+
+/* system = same complete dark palette when OS is dark */
+@media (prefers-color-scheme:dark){
+  html[data-theme="system"]{
+    --bg:#101113;--card:#18191d;--ink:#f4f4f1;--muted:#a2a4aa;
+    --line:#303238;--soft:#222329;--red:#ff858b;--green:#79cfa5;
+    color-scheme:dark;
+  }
+  html[data-theme="system"] body{background:#0b0c0e!important;color:var(--ink)!important}
+  html[data-theme="system"] .app{background:var(--bg)!important}
+  html[data-theme="system"] .card,
+  html[data-theme="system"] .cal,
+  html[data-theme="system"] .sheet,
+  html[data-theme="system"] .recordSwitcher,
+  html[data-theme="system"] .emptyBox{background:var(--card)!important;color:var(--ink)!important;border-color:var(--line)!important}
+  html[data-theme="system"] .hero{background:#1b1c20!important;color:#f7f7f4!important;border:1px solid var(--line)!important}
+  html[data-theme="system"] .hero small,
+  html[data-theme="system"] .hero p{color:#b4b6bb!important;opacity:1!important}
+  html[data-theme="system"] .hero .big{color:#fff!important}
+  html[data-theme="system"] h1,html[data-theme="system"] h2,html[data-theme="system"] h3,html[data-theme="system"] h4,
+  html[data-theme="system"] b,html[data-theme="system"] strong,html[data-theme="system"] .val,
+  html[data-theme="system"] .amount,html[data-theme="system"] .timerClock,html[data-theme="system"] label{color:#f4f4f1!important}
+  html[data-theme="system"] .label,html[data-theme="system"] .muted,html[data-theme="system"] .sub,
+  html[data-theme="system"] .tiny,html[data-theme="system"] .timerStatus,html[data-theme="system"] .form label{color:#a2a4aa!important}
+  html[data-theme="system"] input,html[data-theme="system"] select,html[data-theme="system"] textarea{
+    background:#1d1e22!important;color:#f4f4f1!important;border-color:#373940!important;-webkit-text-fill-color:#f4f4f1!important}
+  html[data-theme="system"] input::placeholder,html[data-theme="system"] textarea::placeholder{
+    color:#777a82!important;-webkit-text-fill-color:#777a82!important;opacity:1!important}
+  html[data-theme="system"] .btn.dark,html[data-theme="system"] .seg button.on,
+  html[data-theme="system"] .subTabs button.on,html[data-theme="system"] .recordTabs button.on,
+  html[data-theme="system"] .themeChoices button.on{background:#f1f1ee!important;color:#111214!important;border-color:#f1f1ee!important}
+  html[data-theme="system"] .btn.light,html[data-theme="system"] .seg button,
+  html[data-theme="system"] .mini,html[data-theme="system"] .themeChoices button{
+    background:#24252a!important;color:#ecece9!important;border-color:#3a3c43!important}
+  html[data-theme="system"] .notice,html[data-theme="system"] .todayOnlyDate,
+  html[data-theme="system"] .daySummary span,html[data-theme="system"] .recordTabs,
+  html[data-theme="system"] .subTabs{background:#222329!important;color:#c4c5ca!important}
+  html[data-theme="system"] .row,html[data-theme="system"] .entry,html[data-theme="system"] .timeEntry{border-color:#303238!important}
+  html[data-theme="system"] .emoji,html[data-theme="system"] .timeIcon{background:#26272c!important;color:#fff!important}
+  html[data-theme="system"] .bubbleMsg{background:#2d2940!important;color:#f5f5f2!important}
+  html[data-theme="system"] .week div{color:#8f9299!important}
+  html[data-theme="system"] .day{color:#dedfdf!important}
+  html[data-theme="system"] .day.has{background:#28292f!important}
+  html[data-theme="system"] .recordCal .day.selected{background:#f1f1ee!important;color:#111214!important}
+  html[data-theme="system"] .monthnav button{color:#f4f4f1!important}
+  html[data-theme="system"] .bar{background:#34353a!important}
+  html[data-theme="system"] .bar i,html[data-theme="system"] .stick{background:#e9e9e6!important}
+  html[data-theme="system"] .drawerNav{background:#15161a!important;border-right:1px solid #2e3036!important}
+  html[data-theme="system"] .drawerNav button{color:#b4b6bc!important}
+  html[data-theme="system"] .drawerNav button.on{background:#292a30!important;color:#fff!important}
+  html[data-theme="system"] .neg{color:#ff858b!important}
+  html[data-theme="system"] .pos,html[data-theme="system"] .incomeAmt{color:#79cfa5!important}
+  html[data-theme="system"] .danger{color:#ff858b!important}
+  html[data-theme="system"] .floatingMenu span{background:#f4f4f1!important}
+}
+</style>
+
+
+<style>
+/* v19 — system/dark modal polish */
+html[data-theme="dark"] .sheet,
+html[data-theme="system"] .sheet{
+  background:#18191d!important;
+  border:1px solid #2e3036!important;
+  box-shadow:0 -18px 50px rgba(0,0,0,.38)!important;
+}
+
+/* The previous white circles/buttons were too glaring in a dark system theme. */
+html[data-theme="dark"] .sheet .x,
+html[data-theme="system"] .sheet .x{
+  background:#27282d!important;
+  color:#f2f2ef!important;
+  border:1px solid #373940!important;
+}
+html[data-theme="dark"] .sheet .seg,
+html[data-theme="system"] .sheet .seg{
+  background:#121316!important;
+  border:1px solid #303238!important;
+}
+html[data-theme="dark"] .sheet .seg button,
+html[data-theme="system"] .sheet .seg button{
+  background:transparent!important;
+  color:#aeb0b6!important;
+  border-color:transparent!important;
+}
+html[data-theme="dark"] .sheet .seg button.on,
+html[data-theme="system"] .sheet .seg button.on{
+  background:#303137!important;
+  color:#fff!important;
+  border:1px solid #45474f!important;
+}
+html[data-theme="dark"] .sheet .btn.dark,
+html[data-theme="system"] .sheet .btn.dark{
+  background:#303137!important;
+  color:#fff!important;
+  border:1px solid #45474f!important;
+}
+html[data-theme="dark"] .sheet .btn.dark:active,
+html[data-theme="system"] .sheet .btn.dark:active{
+  background:#3a3b42!important;
+}
+html[data-theme="dark"] .sheet input,
+html[data-theme="dark"] .sheet select,
+html[data-theme="dark"] .sheet textarea,
+html[data-theme="system"] .sheet input,
+html[data-theme="system"] .sheet select,
+html[data-theme="system"] .sheet textarea{
+  background:#1d1e22!important;
+  color:#f5f5f2!important;
+  border:1px solid #34363d!important;
+}
+html[data-theme="dark"] .sheet label,
+html[data-theme="system"] .sheet label{
+  color:#9fa2aa!important;
+}
+</style>
+
+</head><body><main class="app">
+<div class="top"><div><div class="sub"></div></div></div>
+<header class="titleOnlyHeader"><h1 id="currentPageTitle">홈</h1></header><button class="floatingMenu" onclick="toggleMenu()" aria-label="메뉴"><span></span><span></span><span></span></button>
+<nav id="drawerNav" class="drawerNav"><button class="on" onclick="tab(0,this);closeMenu()">홈</button><button onclick="tab(1,this);closeMenu()">가계부</button><button onclick="tab(2,this);closeMenu()">달력</button><button onclick="tab(3,this);closeMenu()">통계</button><button onclick="tab(4,this);closeMenu()">목표</button><button onclick="tab(5,this);closeMenu()">기록</button><button onclick="tab(6,this);closeMenu()">버블</button><button onclick="tab(7,this);closeMenu()">설정</button></nav><div id="menuBackdrop" class="menuBackdrop" onclick="closeMenu()"></div>
+<section class="page on"><div class="hero"><small id="monthLabel"></small><div class="big" id="netSaved">₩0</div><p>실제로 이체 완료한 미래 구매액</p></div>
+<div class="grid"><div class="card"><div class="label">💸 이번 달 실제 지출</div><div class="val neg" id="monthExpense">₩0</div></div><div class="card"><div class="label">🛍️ 대신 삼 금액</div><div class="val pos" id="monthSkipped">₩0</div></div><div class="card"><div class="label">⏳ 아직 이체 안 함</div><div class="val" id="pending">₩0</div></div><div class="card"><div class="label">📊 저축 이동</div><div class="val" id="saveMove">₩0</div></div></div>
+<h3>이번 달 소비 페이스</h3><div class="card"><div class="row"><span>월 예상 생활비</span><b id="budgetHome">₩0</b></div><div class="row"><span>오늘까지 권장 누적 소비</span><b id="allowedToDate">₩0</b></div><div class="row"><span>오늘까지 실제 지출</span><b id="spentToDate">₩0</b></div><div class="row"><span>기본 하루 권장 소비</span><b id="dailyBudget">₩0</b></div><div id="paceMessage" class="notice"></div></div><h3>최근 기록</h3><div class="card" id="recent"></div></section>
+<section class="page"><div class="monthnav"><button onclick="shiftMonth(-1)">‹</button><b class="viewMonth"></b><button onclick="shiftMonth(1)">›</button></div><div class="grid"><div class="card"><div class="label">실제 지출</div><div class="val neg" id="ledExp">₩0</div></div><div class="card"><div class="label">저축 이동</div><div class="val pos" id="ledSave">₩0</div></div></div><h3>지출 카테고리</h3><div class="card" id="categories"></div><h3>전체 내역</h3><div class="card" id="ledgerList"></div></section>
+<section class="page"><div class="monthnav"><button onclick="shiftMonth(-1)">‹</button><b class="viewMonth"></b><button onclick="shiftMonth(1)">›</button></div><div class="cal"><div class="week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div><div class="days" id="days"></div></div><div id="dayDetail"></div></section>
+<section class="page"><div class="card"><div class="label">최근 6개월 실제 지출</div><div class="chart" id="expenseChart"></div></div><h3>이번 달 요약</h3><div class="card" id="statRows"></div><h3>‘대신 삼’ TOP</h3><div class="card" id="skipTop"></div></section>
+<section class="page">
+<div class="card"><div class="label">📈 연금저축 연간 목표</div><div class="val"><span id="pensionNow">₩0</span> / <span id="pensionGoalText">₩0</span></div><div class="bar"><i id="pensionBar"></i></div></div>
+<div class="card" style="margin-top:9px"><div class="label">💼 IRP 연간 목표</div><div class="val"><span id="irpNow">₩0</span> / <span id="irpGoalText">₩0</span></div><div class="bar"><i id="irpBar"></i></div></div>
+<div class="card" style="margin-top:9px"><div class="label">🏠 독립자금 누적</div><div class="val" id="indNow">₩0</div></div>
+<h3>자동 저축 순서</h3><div class="card form"><label>연금저축 목표</label><input id="pGoal" type="number"><label>IRP 목표</label><input id="rGoal" type="number"><label>연금·IRP 달성 후</label><select id="afterGoal"><option value="independent">독립자금으로 전부 이동</option><option value="pension">연금저축 계속</option></select><div class="notice">대신 삼 금액을 실제 이체 완료로 기록하면 <b>연금저축 → IRP → 독립자금</b> 순서로 자동 배분합니다. 목표를 넘는 한 건의 금액도 남은 한도만큼 나눠서 다음 목적지로 넘깁니다.</div><button class="btn dark wide" onclick="saveRules()">규칙 저장</button></div>
+<h3>월 생활비 계획</h3><div class="card form"><label>이번 달 예상 사용비용</label><input id="monthlyBudgetInput" type="number"><button class="btn dark wide" style="margin-top:10px" onclick="saveBudget()">생활비 저장</button></div>
+
+</section>
+<section class="page" id="recordPage">
+<div class="card recordSwitcher">
+<div class="subTabs embeddedTabs">
+<button class="on" onclick="todayMode(0,this)">⏱ 타이머</button>
+<button onclick="todayMode(1,this)">＋ 시간 추가</button>
+</div>
+<div class="todayMode on">
+<div class="timerInner">
+<div class="timerStatus" id="rTimerStatus">지금은 기록 중이 아니에요</div>
+<div class="timerClock" id="rTimerClock">00:00:00</div>
+<div class="timerStartRow"><label for="rTimerStartAt">시작 시각 <span>선택 · 비워두면 지금부터</span></label><input type="time" id="rTimerStartAt" step="60"><small class="muted timerHint">시·분만 입력하면 현재 시각의 초까지 자동 계산해요.</small></div>
+<div class="form timerCtl"><select id="rTimerActivity"><option>업무</option><option>운동</option><option>공부</option><option>성경 연구</option><option>기타</option></select><button class="btn dark" id="rTimerBtn" onclick="toggleTimer()">START</button></div>
+<button class="btn light wide" id="rTimerSave" style="display:none;margin-top:8px" onclick="saveTimer()">기록 저장</button>
+</div>
+</div>
+<div class="todayMode">
+<div class="form recordForm embeddedForm">
+<div class="todayOnlyDate"><span>기록 날짜</span><b id="rTodayDateLabel"></b></div>
+<label>활동</label><input id="rActivity" placeholder="무엇을 했나요?">
+<div class="twocol"><div><label>시작</label><input type="time" id="rStart"></div><div><label>종료</label><input type="time" id="rEnd"></div></div>
+<button class="btn dark wide" style="margin-top:12px" onclick="addTimeRecord()">기록 추가</button>
+</div>
+</div>
+</div>
+
+<div class="grid"><div class="card"><div class="label">오늘 총 기록</div><div class="val" id="rTodayTotal">0분</div></div><div class="card"><div class="label">가장 오래 한 활동</div><div class="val" id="rLongest">-</div></div></div>
+
+<h3>히스토리</h3>
+<div class="card form historyFilter">
+<label>날짜 선택</label><input type="date" id="rHistoryDate" onchange="renderRecords()">
+</div>
+<div class="card" id="rHistory"></div>
+</section>
+
+<section class="page" id="bubblePage">
+<div class="card form historyFilter">
+<label>날짜 선택</label><input type="date" id="rBubbleDate" onchange="renderRecords()">
+</div>
+<div class="card bubbleWrap" id="rBubbles"></div>
+
+<div id="bubbleComposer" class="card form recordForm" style="margin-top:12px">
+<div class="todayOnlyDate"><span>새 버블</span><b>오늘만 작성 가능</b></div>
+<textarea id="rBubbleText" placeholder="오늘 있었던 일을 나한테 보내기..."></textarea>
+<button class="btn dark wide" style="margin-top:9px" onclick="sendBubble()">오늘 버블 보내기</button>
+</div>
+
+</section>
+
+<section class="page" id="settingsPage">
+</div>
+</div>
+
+<h3>테마</h3>
+<div class="card themeCard">
+<div class="themeChoices" role="group" aria-label="테마 선택">
+<button type="button" data-theme-choice="system" onclick="setTheme('system')">시스템</button>
+<button type="button" data-theme-choice="light" onclick="setTheme('light')">화이트</button>
+<button type="button" data-theme-choice="dark" onclick="setTheme('dark')">블랙</button>
+</div>
+<p class="tiny" style="margin:10px 2px 0">시스템은 휴대폰의 다크/라이트 모드를 따라가요.</p>
+</div>
+<h3>데이터 관리</h3>
+<div class="card">
+<p class="muted" style="margin-top:0">기록을 파일로 백업하거나 전체 데이터를 초기화할 수 있어요.</p>
+<div class="dataActions">
+<button class="btn dark wide" onclick="exportData()">백업</button>
+<button class="btn light danger wide" onclick="clearAll()">전체 초기화</button>
+</div>
+</div>
+</section>
+</main>
+<div class="fab"><button class="btn light" onclick="openModal('income')">＋ 수입</button><button class="btn dark" onclick="openModal('expense')">＋ 지출</button></div>
+<div class="modal" id="modal"><div class="sheet"><button class="x" onclick="closeModal()">×</button><h2 id="formTitle"></h2><div class="form"><div class="seg expenseChoice" id="expenseChoice"><button id="expenseSeg" onclick="setType('expense')">실제 지출</button><button id="skipSeg" onclick="setType('skip')">대신 삼</button></div><button id="incomeSeg" style="display:none"></button><label>날짜</label><input type="date" id="fDate"><label id="fTimeLabel">시간</label><input type="time" id="fTime"><label id="nameLabel"></label><input id="fName"><label>금액</label><input type="number" id="fAmount"><label>카테고리</label><select id="fCategory"><option>식비</option><option>카페/간식</option><option>패션</option><option>교통</option><option>생활</option><option>취미/굿즈</option><option>건강/운동</option><option>구독</option><option>기타</option></select><div id="skipFields"><label>실제로 돈을 옮겼나요?</label><select id="fTransferred"><option value="true">이체 완료</option><option value="false">아직 안 함</option></select><div class="notice" id="splitPreview"></div></div><label>메모</label><input id="fMemo"><button class="btn dark wide" style="margin-top:14px" onclick="saveRecord()">저장하기</button></div></div></div>
+<script>
+const KEY='daesinsam_v5';let old=JSON.parse(localStorage.getItem('daesinsam_v3_data')||'null');let state=JSON.parse(localStorage.getItem(KEY)||'null')||old||{records:[],settings:{monthlyBudget:1000000,pensionGoal:6000000,irpGoal:3000000,afterGoal:'independent'}};state.settings={monthlyBudget:1000000,pensionGoal:6000000,irpGoal:3000000,afterGoal:'independent',showExpensesInTimeline:true,...state.settings};state.times=Array.isArray(state.times)?state.times:[];state.bubbles=Array.isArray(state.bubbles)?state.bubbles:[];let type='expense',editId=null,view=new Date();view.setDate(1);const $=id=>document.getElementById(id),won=n=>'₩'+Math.round(n||0).toLocaleString('ko-KR'),today=()=>new Date().toISOString().slice(0,10),ym=d=>d.slice(0,7);
+function persist(){localStorage.setItem(KEY,JSON.stringify(state));render()}const pageNames=['홈','가계부','달력','통계','목표','기록','버블','설정'];function toggleMenu(){$('drawerNav').classList.toggle('open');$('menuBackdrop').classList.toggle('open')}function closeMenu(){$('drawerNav').classList.remove('open');$('menuBackdrop').classList.remove('open')}function tab(n,b){document.querySelectorAll('.page').forEach((x,i)=>x.classList.toggle('on',i===n));document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('currentPageTitle').textContent=pageNames[n]||'';let fab=document.querySelector('.fab');if(fab)fab.style.display=n===1?'grid':'none';render();renderSettings()}
+function allocation(amount,date,excludeId=null){let y=date.slice(0,4),prior=state.records.filter(r=>r.type==='skip'&&r.transferred&&r.date.slice(0,4)===y&&r.id!==excludeId).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id);let p=0,ir=0;for(const r of prior){let a=allocCore(r.amount,p,ir);p+=a.pension;ir+=a.irp}return allocCore(amount,p,ir)}
+function allocCore(amount,pUsed,irpUsed){let rem=amount,pg=+state.settings.pensionGoal||0,rg=+state.settings.irpGoal||0,p=Math.min(rem,Math.max(0,pg-pUsed));rem-=p;let ir=Math.min(rem,Math.max(0,rg-irpUsed));rem-=ir;let ind=state.settings.afterGoal==='independent'?rem:0;if(state.settings.afterGoal==='pension')p+=rem;return{pension:p,irp:ir,independent:ind}}
+function openModal(t,id=null){editId=id;let r=id?state.records.find(x=>x.id===id):null;setType(r?r.type:t);$('expenseChoice').style.display=((r?r.type:t)==='income')?'none':'grid';$('fDate').value=r?r.date:today();$('fTime').value=r&&r.time?r.time:new Date().toTimeString().slice(0,5);$('fName').value=r?r.name:'';$('fAmount').value=r?r.amount:'';$('fCategory').value=r?r.category:'식비';$('fTransferred').value=r&&r.type==='skip'?String(r.transferred):'true';$('fMemo').value=r?r.memo||'':'';$('modal').style.display='flex';preview()}
+function closeModal(){$('modal').style.display='none';editId=null}function setType(t){type=t;$('incomeSeg').classList.toggle('on',t==='income');$('expenseSeg').classList.toggle('on',t==='expense');$('skipSeg').classList.toggle('on',t==='skip');$('skipFields').style.display=t==='skip'?'block':'none';$('formTitle').textContent=editId?'기록 수정':(t==='income'?'수입 기록':t==='expense'?'실제 지출 기록':'대신 삼 기록');$('nameLabel').textContent=t==='income'?'어디서 들어왔나요?':t==='expense'?'무엇을 샀나요?':'무엇을 대신 삼으로 기록할까요?';preview()}
+$('fAmount').addEventListener('input',preview);$('fDate').addEventListener('change',preview);
+function preview(){if(type!=='skip')return;let a=+$('fAmount').value||0,d=$('fDate').value||today(),x=allocation(a,d,editId);$('splitPreview').innerHTML=`자동 배분 예상<br>📈 연금저축 <b>${won(x.pension)}</b> · 💼 IRP <b>${won(x.irp)}</b> · 🏠 독립 <b>${won(x.independent)}</b>`}
+function saveRecord(){let a=+$('fAmount').value,n=$('fName').value.trim(),d=$('fDate').value;if(!a||!n||!d)return alert('날짜, 이름, 금액을 입력해 주세요.');let r={id:editId||Date.now(),type,date:d,time:$('fTime').value||'',name:n,amount:a,category:$('fCategory').value,memo:$('fMemo').value.trim()};if(type==='skip')r.transferred=$('fTransferred').value==='true';if(editId)state.records=state.records.map(x=>x.id===editId?r:x);else state.records.push(r);persist();closeModal()}
+function del(id){if(confirm('이 기록을 삭제할까요?')){state.records=state.records.filter(x=>x.id!==id);persist()}}function key(){return `${view.getFullYear()}-${String(view.getMonth()+1).padStart(2,'0')}`}function mrs(){return state.records.filter(r=>ym(r.date)===key())}
+function getAlloc(r){if(r.type!=='skip'||!r.transferred)return{pension:0,irp:0,independent:0};return allocation(r.amount,r.date,r.id)}
+function entry(r){let e=r.type==='expense',inc=r.type==='income',sk=r.type==='skip',a=getAlloc(r);return `<div class="entry"><div class="emoji">${inc?'💰':e?'💸':'✨'}</div><div class="grow"><b>${r.name}</b><span>${r.date}${r.time?' · '+r.time:''} · ${r.category}${sk?(r.transferred?' · 이체완료':' · 이체대기'):''}</span>${sk&&r.transferred?`<div class="tiny">연금 ${won(a.pension)} · IRP ${won(a.irp)} · 독립 ${won(a.independent)}</div>`:''}${r.memo?`<div class="tiny">${r.memo}</div>`:''}</div><div class="amount ${e?'neg':'pos'}">${e?'-':'+'}${won(r.amount)}<div class="actions"><button class="mini" onclick="openModal('${r.type}',${r.id})">수정</button><button class="mini" onclick="del(${r.id})">삭제</button></div></div></div>`}
+function render(){let rs=mrs(),income=rs.filter(r=>r.type==='income').reduce((s,r)=>s+r.amount,0),exp=rs.filter(r=>r.type==='expense').reduce((s,r)=>s+r.amount,0),skip=rs.filter(r=>r.type==='skip').reduce((s,r)=>s+r.amount,0),saved=rs.filter(r=>r.type==='skip'&&r.transferred).reduce((s,r)=>s+r.amount,0);$('monthLabel').textContent=`${view.getMonth()+1}월, 실제 이체한 미래 구매액`;$('netSaved').textContent=won(saved);$('monthExpense').textContent=won(exp);$('monthSkipped').textContent=won(skip);$('pending').textContent=won(skip-saved);$('saveMove').textContent=won(saved);document.querySelectorAll('.viewMonth').forEach(x=>x.textContent=`${view.getFullYear()}년 ${view.getMonth()+1}월`);$('recent').innerHTML=[...state.records].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,5).map(entry).join('')||'<div class="emptyBox">데이터 없음<br>아직 기록이 없어요.</div>';$('ledExp').textContent=won(exp);$('ledSave').textContent=won(saved);$('ledgerList').innerHTML=[...rs].sort((a,b)=>b.date.localeCompare(a.date)).map(entry).join('')||'<div class="emptyBox">데이터 없음<br>아직 기록이 없어요.</div>';let c={};rs.filter(r=>r.type==='expense').forEach(r=>c[r.category]=(c[r.category]||0)+r.amount);$('categories').innerHTML=Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="row"><span>${k}</span><b>${won(v)}</b></div>`).join('')||'<div class="emptyBox">데이터 없음<br>지출 기록이 없어요.</div>';calendar(rs);stats(rs,exp,skip,saved,income);goals();budget(rs);renderRecords()}
+function calendar(rs){let y=view.getFullYear(),m=view.getMonth(),f=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),h='';for(let i=0;i<f;i++)h+='<div></div>';for(let d=1;d<=last;d++){let ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,rr=rs.filter(r=>r.date===ds),hasTime=state.times.some(x=>x.date===ds),hasBubble=state.bubbles.some(x=>x.date===ds);h+=`<div class="day ${rr.length||hasTime||hasBubble?'has':''}" onclick="showDay('${ds}')">${d}<div class="dots">${rr.some(r=>r.type==='income')?'<span class="iDot">●</span> ':''}${rr.some(r=>r.type==='skip')?'<span class="sDot">●</span> ':''}${rr.some(r=>r.type==='expense')?'<span class="eDot">●</span> ':''}${hasTime?'<span class="tDot">●</span> ':''}${hasBubble?'<span class="bDot">●</span>':''}</div></div>`}$('days').innerHTML=h;$('dayDetail').innerHTML='<div class="notice"><span class="iDot">●</span> 수입 · <span class="neg">●</span> 지출 · <span class="pos">●</span> 대신 삼 · <span class="tDot">●</span> 시간 · <span class="bDot">●</span> 버블</div>'}
+function showDay(d){let money=state.records.filter(r=>r.date===d),times=state.times.filter(x=>x.date===d).sort((a,b)=>(a.start||'').localeCompare(b.start||'')),bubbles=state.bubbles.filter(x=>x.date===d).sort((a,b)=>(a.time||'').localeCompare(b.time||'')),sum=times.reduce((a,x)=>a+(x.minutes||0),0);$('dayDetail').innerHTML=`<h3>${d}</h3><div class="card"><div class="daySummary"><span>금전 ${money.length}건</span><span>시간 ${durText(sum)}</span><span>버블 ${bubbles.length}개</span></div>${money.length?'<h4>가계부</h4>'+money.map(entry).join(''):''}${times.length?'<h4>오늘 기록</h4>'+times.map(timeEntryHTML).join(''):''}${bubbles.length?'<h4>버블</h4>'+bubbles.map(x=>`<div class="timeEntry"><div class="timeIcon">💬</div><div class="timeBody"><b>${safe(x.text)}</b><span>${x.time||''}</span></div></div>`).join(''):''}${!money.length&&!times.length&&!bubbles.length?'<div class="emptyBox">데이터 없음<br>이 날짜에는 기록이 없어요.</div>':''}</div>`}
+function stats(rs,exp,skip,saved,income){let ms=[];for(let j=5;j>=0;j--){let d=new Date(view.getFullYear(),view.getMonth()-j,1),k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,v=state.records.filter(r=>r.type==='expense'&&ym(r.date)===k).reduce((s,r)=>s+r.amount,0);ms.push({n:d.getMonth()+1,v})}let mx=Math.max(...ms.map(x=>x.v),1);$('expenseChart').innerHTML=ms.map(x=>`<div class="col"><div class="stick" style="height:${Math.max(3,x.v/mx*115)}px"></div>${x.n}월</div>`).join('');$('statRows').innerHTML=`<div class="row"><span>수입</span><b class="incomeAmt">${won(income)}</b></div><div class="row"><span>실제 지출</span><b>${won(exp)}</b></div><div class="row"><span>대신 삼 금액</span><b>${won(skip)}</b></div><div class="row"><span>저축 이동</span><b>${won(saved)}</b></div>`;$('skipTop').innerHTML=rs.filter(r=>r.type==='skip').sort((a,b)=>b.amount-a.amount).slice(0,5).map((r,i)=>`<div class="row"><span>${i+1}. ${r.name}</span><b>${won(r.amount)}</b></div>`).join('')||'<div class="emptyBox">데이터 없음</div>'}
+function goals(){let yr=String(view.getFullYear()),all=state.records.filter(r=>r.type==='skip'&&r.transferred&&r.date.startsWith(yr)).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id),p=0,ir=0,ind=0;for(let r of all){let a=allocCore(r.amount,p,ir);p+=a.pension;ir+=a.irp;ind+=a.independent}$('pensionNow').textContent=won(p);$('irpNow').textContent=won(ir);$('indNow').textContent=won(ind);$('pensionGoalText').textContent=won(state.settings.pensionGoal);$('irpGoalText').textContent=won(state.settings.irpGoal);$('pensionBar').style.width=Math.min(100,p/state.settings.pensionGoal*100)+'%';$('irpBar').style.width=Math.min(100,ir/state.settings.irpGoal*100)+'%';$('pGoal').value=state.settings.pensionGoal;$('rGoal').value=state.settings.irpGoal;$('afterGoal').value=state.settings.afterGoal;$('monthlyBudgetInput').value=state.settings.monthlyBudget}
+function budget(rs){let b=+state.settings.monthlyBudget||0,y=view.getFullYear(),m=view.getMonth(),dim=new Date(y,m+1,0).getDate(),now=new Date(),cur=now.getFullYear()===y&&now.getMonth()===m,day=cur?now.getDate():dim,daily=b/dim,allow=daily*day,spent=rs.filter(r=>r.type==='expense'&&(!cur||+r.date.slice(8,10)<=day)).reduce((s,r)=>s+r.amount,0),diff=spent-allow,remain=Math.max(1,dim-day);$('budgetHome').textContent=won(b);$('allowedToDate').textContent=won(allow);$('spentToDate').textContent=won(spent);$('dailyBudget').textContent=won(daily);$('paceMessage').innerHTML=diff>0?`⚠️ 권장 페이스보다 <b>${won(diff)}</b> 더 썼어요.<br>남은 ${remain}일 동안 하루 평균 <b>${won(diff/remain)}</b>씩 덜 쓰면 회복돼요.<br>조정 권장 소비: 하루 약 <b>${won(Math.max(0,daily-diff/remain))}</b>`:`✓ 권장 페이스보다 <b>${won(Math.abs(diff))}</b> 여유 있어요.`}
+function saveRules(){let p=+$('pGoal').value,r=+$('rGoal').value;if(p<0||r<0)return alert('목표 금액을 확인해 주세요.');state.settings.pensionGoal=p;state.settings.irpGoal=r;state.settings.afterGoal=$('afterGoal').value;persist();alert('자동 저축 규칙을 저장했어요.')}function saveBudget(){let v=+$('monthlyBudgetInput').value;if(v<=0)return alert('금액을 입력해 주세요.');state.settings.monthlyBudget=v;persist();alert('저장했어요.')}function shiftMonth(n){view=new Date(view.getFullYear(),view.getMonth()+n,1);render()}
+function exportData(){let b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='daesinsam-v5-backup.json';a.click()}function importData(i){let f=i.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{state=JSON.parse(r.result);persist();alert('불러왔어요.')}catch{alert('백업 파일을 확인해 주세요.')}};r.readAsText(f)}function clearAll(){if(confirm('정말 전체 삭제할까요?')){state={records:[],settings:{monthlyBudget:1000000,pensionGoal:6000000,irpGoal:3000000,afterGoal:'independent'}};persist()}}render();
+</script>
+<script>
+let recordView=new Date();recordView.setDate(1);let recordSelected=today(),timerStarted=null,timerInterval=null,timerElapsed=0;
+function recordTab(n,b){document.querySelectorAll('#recordPage .recordPane').forEach((x,i)=>x.classList.toggle('on',i===n));document.querySelectorAll('#recordPage .recordTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');renderRecords()}function todayMode(n,b){document.querySelectorAll('.todayMode').forEach((x,i)=>x.classList.toggle('on',i===n));document.querySelectorAll('.subTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on')}
+function mins(t){let a=t.split(':').map(Number);return a[0]*60+a[1]}
+function durText(n){return n>=60?Math.floor(n/60)+'시간 '+(n%60)+'분':n+'분'}
+function timeEntryHTML(r){return `<div class="timeEntry"><div class="timeIcon">⏱️</div><div class="timeBody"><b>${safe(r.activity)}</b><span>${r.date} · ${r.start||''}${r.end?' ~ '+r.end:''} · ${durText(r.minutes)}</span></div><div class="actions"><button class="mini" onclick="editTimeRecord(${r.id})">수정</button><button class="mini" onclick="deleteTimeRecord(${r.id})">삭제</button></div></div>`}
+function expenseTimeHTML(r){return `<div class="timeEntry"><div class="timeIcon">${r.type==='income'?'💰':'💸'}</div><div class="timeBody"><b>${safe(r.name)}</b><span>${r.date} · ${r.time} · ${safe(r.category)} · ${r.type==='income'?'+':'-'}${won(r.amount)}</span></div><div class="actions"><button class="mini" onclick="openModal('expense',${r.id})">수정</button></div></div>`}
+function renderSettings(){}
+function saveAppSettings(){}
+function renderRecords(){
+ let td=today(),ts=state.times.filter(x=>x.date===td),sum=ts.reduce((a,x)=>a+(+x.minutes||0),0),long=[...ts].sort((a,b)=>b.minutes-a.minutes)[0];
+
+ if($('rTodayDateLabel')) $('rTodayDateLabel').textContent=td;
+ if($('rTodayTotal')) $('rTodayTotal').textContent=durText(sum);
+ if($('rLongest')) $('rLongest').textContent=long?long.activity:'-';
+
+ if($('rHistoryDate')&&!$('rHistoryDate').value) $('rHistoryDate').value=td;
+ let hd=$('rHistoryDate')?$('rHistoryDate').value:td;
+ if($('rHistory')){
+   let histTimes=state.times.filter(x=>x.date===hd).map(x=>({...x,_kind:'time',_sort:(x.start||'')}));
+   if(state.settings.showExpensesInTimeline){
+     histTimes.push(...state.records.filter(x=>(x.type==='expense'||x.type==='income')&&x.date===hd&&x.time).map(x=>({...x,_kind:x.type,_sort:x.time})));
+   }
+   histTimes.sort((a,b)=>a._sort.localeCompare(b._sort));
+   $('rHistory').innerHTML=histTimes.length?histTimes.map(x=>(x._kind==='expense'||x._kind==='income')?expenseTimeHTML(x):timeEntryHTML(x)).join(''):'<div class="emptyBox">데이터 없음<br>선택한 날짜의 기록이 없어요.</div>';
+ }
+
+ if($('rBubbleDate')&&!$('rBubbleDate').value) $('rBubbleDate').value=td;
+ let bd=$('rBubbleDate')?$('rBubbleDate').value:td;
+ if($('rBubbles')){
+   let bs=state.bubbles.filter(x=>x.date===bd).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+   $('rBubbles').innerHTML=bs.length?bs.map(x=>`<div class="bubbleMsg">${safe(x.text)}<small>${x.time} · ${bd===td?`<button onclick="editBubble(${x.id})">수정</button> · <button onclick="deleteBubble(${x.id})">삭제</button>`:'지난 기록'}</small></div>`).join(''):'<div class="emptyBox">데이터 없음<br>선택한 날짜의 버블이 없어요.</div>';
+   if($('bubbleComposer')) $('bubbleComposer').style.display=bd===td?'block':'none';
+   if($('bubblePastNotice')) $('bubblePastNotice').style.display=bd===td?'none':'grid';
+ }
+}
+function addTimeRecord(){let d=today(),a=$('rActivity').value.trim()||'기타',st=$('rStart').value,en=$('rEnd').value;if(!d||!st||!en)return alert('날짜, 시작, 종료 시간을 선택해 주세요.');if(mins(en)<=mins(st))return alert('종료 시간은 시작 시간보다 늦어야 해요.');state.times.push({id:Date.now(),date:d,activity:a,start:st,end:en,minutes:mins(en)-mins(st)});persist();$('rActivity').value='';$('rStart').value='';$('rEnd').value=''}
+function editTimeRecord(id){let r=state.times.find(x=>x.id===id);if(!r)return;let a=prompt('활동명',r.activity);if(a===null)return;let st=prompt('시작 시간 (HH:MM)',r.start),en=prompt('종료 시간 (HH:MM)',r.end);if(!st||!en||mins(en)<=mins(st))return alert('시간을 확인해 주세요.');r.activity=a.trim()||'기타';r.start=st;r.end=en;r.minutes=mins(en)-mins(st);persist()}
+function deleteTimeRecord(id){if(confirm('이 시간 기록을 삭제할까요?')){state.times=state.times.filter(x=>x.id!==id);persist()}}
+function toggleTimer(){
+ if(!timerStarted){
+   if(timerElapsed===0){
+     const v=$('rTimerStartAt')?.value;
+     if(v){
+       const [hh,mm]=v.split(':').map(Number);
+       const nowMs=Date.now();
+       const now=new Date(nowMs);
+       const chosen=new Date(now);
+       // 사용자는 시/분만 지정. 시작 초는 00초로 보고,
+       // 현재 기기 시계의 실제 초/밀리초까지 포함해 경과시간을 계산합니다.
+       chosen.setHours(hh,mm,0,0);
+       if(chosen.getTime()>nowMs) return alert('미래 시간부터 타이머를 시작할 수 없어요.');
+       timerOriginalStart=chosen.getTime();
+       timerElapsed=nowMs-timerOriginalStart;
+     }else{ timerOriginalStart=Date.now(); timerElapsed=0; }
+   }
+   timerStarted=Date.now()-timerElapsed;$('rTimerBtn').textContent='STOP';$('rTimerStatus').textContent='기록 중이에요';$('rTimerSave').style.display='block';
+   if($('rTimerStartAt')) $('rTimerStartAt').disabled=true;
+   clearInterval(timerInterval);timerInterval=setInterval(drawTimer,250);drawTimer();
+ }else{timerElapsed=Date.now()-timerStarted;timerStarted=null;clearInterval(timerInterval);$('rTimerBtn').textContent='RESUME';$('rTimerStatus').textContent='일시정지됨'}
+}
+function drawTimer(){let ms=timerStarted?Date.now()-timerStarted:timerElapsed,s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60);$('rTimerClock').textContent=String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function saveTimer(){let ms=timerStarted?Date.now()-timerStarted:timerElapsed;if(ms<1000)return;clearInterval(timerInterval);let now=new Date(),minutes=Math.max(1,Math.round(ms/60000)),startDate=timerOriginalStart?new Date(timerOriginalStart):new Date(now.getTime()-ms),f=x=>String(x).padStart(2,'0');state.times.push({id:Date.now(),date:today(),activity:$('rTimerActivity').value,start:f(startDate.getHours())+':'+f(startDate.getMinutes())+':'+f(startDate.getSeconds()),end:f(now.getHours())+':'+f(now.getMinutes())+':'+f(now.getSeconds()),minutes});timerStarted=null;timerElapsed=0;timerOriginalStart=null;$('rTimerClock').textContent='00:00:00';$('rTimerBtn').textContent='START';$('rTimerStatus').textContent='지금은 기록 중이 아니에요';$('rTimerSave').style.display='none';if($('rTimerStartAt')){$('rTimerStartAt').value='';$('rTimerStartAt').disabled=false}persist()}
+function sendBubble(){let t=$('rBubbleText').value.trim();if(!t)return;if($('rBubbleDate'))$('rBubbleDate').value=today();let n=new Date(),f=x=>String(x).padStart(2,'0');state.bubbles.push({id:Date.now(),date:today(),time:f(n.getHours())+':'+f(n.getMinutes()),text:t});$('rBubbleText').value='';persist()}
+function editBubble(id){let r=state.bubbles.find(x=>x.id===id),v=prompt('버블 수정',r.text);if(v!==null&&v.trim()){r.text=v.trim();persist()}}
+function deleteBubble(id){if(confirm('이 버블을 삭제할까요?')){state.bubbles=state.bubbles.filter(x=>x.id!==id);persist()}}
+function shiftRecordMonth(n){recordView=new Date(recordView.getFullYear(),recordView.getMonth()+n,1);renderRecordCalendar()}
+function renderRecordCalendar(){if(!$('rCalDays'))return;let y=recordView.getFullYear(),m=recordView.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),h='';$('rCalMonth').textContent=`${y}년 ${m+1}월`;for(let i=0;i<first;i++)h+='<div></div>';for(let d=1;d<=last;d++){let ds=`${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`,has=state.times.some(x=>x.date===ds)||state.bubbles.some(x=>x.date===ds)||(state.settings.showExpensesInTimeline&&state.records.some(x=>x.type==='expense'&&x.date===ds&&x.time));h+=`<div class="day ${has?'has':''} ${recordSelected===ds?'selected':''}" onclick="selectRecordDay('${ds}')">${d}<div class="dots">${has?'<span class="rDot">●</span>':''}</div></div>`}$('rCalDays').innerHTML=h;showRecordDay()}
+function selectRecordDay(d){recordSelected=d;renderRecordCalendar()}
+function showRecordDay(){let ts=state.times.filter(x=>x.date===recordSelected),bs=state.bubbles.filter(x=>x.date===recordSelected),es=state.settings.showExpensesInTimeline?state.records.filter(x=>(x.type==='expense'||x.type==='income')&&x.date===recordSelected&&x.time):[],sum=ts.reduce((a,x)=>a+x.minutes,0);$('rCalDetail').innerHTML=`<h3>${recordSelected} 기록</h3><div class="card"><div class="row"><span>시간 기록</span><b>${durText(sum)}</b></div><div class="row"><span>버블</span><b>${bs.length}개</b></div>${ts.map(timeEntryHTML).join('')}${es.map(expenseTimeHTML).join('')}${bs.map(x=>`<div class="timeEntry"><div class="timeIcon">💬</div><div class="timeBody"><b>${safe(x.text)}</b><span>${x.time}</span></div></div>`).join('')}${!ts.length&&!bs.length&&!es.length?'<div class="emptyBox">데이터 없음</div>':''}</div>`}
+function safe(v=''){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+renderRecords();renderSettings();
+</script>
+
+<script>
+const TIMER_STATE_KEY='daesinsam_timer_state_v1';
+
+function saveTimerState(){
+  const running = !!timerStarted;
+  const payload = {
+    running,
+    startedAt: running ? timerStarted : null,
+    originalStart: typeof timerOriginalStart!=='undefined' ? timerOriginalStart : null,
+    elapsed: running ? 0 : (timerElapsed||0),
+    activity: $('rTimerActivity') ? $('rTimerActivity').value : '기타',
+    savedAt: Date.now()
+  };
+  localStorage.setItem(TIMER_STATE_KEY, JSON.stringify(payload));
+}
+function clearTimerState(){ localStorage.removeItem(TIMER_STATE_KEY); }
+
+function restoreTimerState(){
+  let x;
+  try{x=JSON.parse(localStorage.getItem(TIMER_STATE_KEY)||'null')}catch(e){x=null}
+  if(!x) return;
+  if($('rTimerActivity') && x.activity) $('rTimerActivity').value=x.activity;
+
+  if(x.running && x.startedAt){
+    timerStarted=Number(x.startedAt);
+    timerOriginalStart=Number(x.originalStart||x.startedAt);
+    timerElapsed=Math.max(0,Date.now()-timerStarted);
+    if(timerInterval) clearInterval(timerInterval);
+    timerInterval=setInterval(drawTimer,250);
+    if($('rTimerBtn')) $('rTimerBtn').textContent='STOP';
+    if($('rTimerStatus')) $('rTimerStatus').textContent='기록 중이에요';
+    if($('rTimerSave')) $('rTimerSave').style.display='block';
+    drawTimer();
+  }else if(Number(x.elapsed)>0){
+    timerStarted=null;
+    timerOriginalStart=Number(x.originalStart||0)||null;
+    timerElapsed=Number(x.elapsed);
+    if($('rTimerBtn')) $('rTimerBtn').textContent='RESUME';
+    if($('rTimerStatus')) $('rTimerStatus').textContent='일시정지됨';
+    if($('rTimerSave')) $('rTimerSave').style.display='block';
+    drawTimer();
+  }
+}
+window.addEventListener('pagehide',saveTimerState);
+document.addEventListener('visibilitychange',()=>{ if(document.hidden && (timerStarted||timerElapsed)) saveTimerState(); });
+</script>
+
+<script>
+const __toggleTimerPersistent=window.toggleTimer;
+window.toggleTimer=function(){
+  __toggleTimerPersistent();
+  saveTimerState();
+};
+const __saveTimerPersistent=window.saveTimer;
+window.saveTimer=function(){
+  __saveTimerPersistent();
+  if(!timerStarted && !timerElapsed) clearTimerState();
+  else saveTimerState();
+};
+window.addEventListener('load',()=>setTimeout(restoreTimerState,0));
+</script>
+
+<script>
+/* v20 — start-time behavior
+   idle: show current HH:MM
+   start: freeze the chosen HH:MM and use the current clock's seconds/ms
+   active/paused session: start time cannot be edited
+   restored timer: keep showing the original start time
+*/
+(function(){
+  const pad2=n=>String(n).padStart(2,'0');
+  const hhmm=d=>pad2(d.getHours())+':'+pad2(d.getMinutes());
+  let idleStartClock=null;
+
+  function startInput(){ return document.getElementById('rTimerStartAt'); }
+
+  function markAutoValue(){
+    const el=startInput();
+    if(!el || timerStarted || timerElapsed>0) return;
+    el.value=hhmm(new Date());
+    el.dataset.autoNow='1';
+    el.disabled=false;
+  }
+
+  function freezeStartInput(ms){
+    const el=startInput();
+    if(!el) return;
+    el.value=hhmm(new Date(ms));
+    el.dataset.autoNow='0';
+    el.disabled=true;
+  }
+
+  function startIdleClock(){
+    clearInterval(idleStartClock);
+    markAutoValue();
+    idleStartClock=setInterval(()=>{
+      const el=startInput();
+      if(!el || timerStarted || timerElapsed>0) return;
+      if(el.dataset.autoNow==='1' && document.activeElement!==el){
+        el.value=hhmm(new Date());
+      }
+    },1000);
+  }
+
+  function bindStartInput(){
+    const el=startInput();
+    if(!el || el.dataset.v20Bound) return;
+    el.dataset.v20Bound='1';
+    el.addEventListener('input',()=>{ el.dataset.autoNow='0'; });
+    el.addEventListener('change',()=>{ el.dataset.autoNow='0'; });
+    el.addEventListener('focus',()=>{
+      if(!timerStarted && !timerElapsed && el.dataset.autoNow==='1'){
+        // Keep the displayed current time, but once the user edits it it becomes manual.
+      }
+    });
+  }
+
+  window.toggleTimer=function(){
+    const el=startInput();
+
+    if(!timerStarted){
+      if(timerElapsed===0){
+        const nowMs=Date.now();
+        const now=new Date(nowMs);
+        const v=el && el.value;
+
+        if(v && el.dataset.autoNow!=='1'){
+          const [hh,mm]=v.split(':').map(Number);
+          const chosen=new Date(now);
+          // User chooses only hour/minute.
+          // Seconds and milliseconds come from the actual current clock.
+          chosen.setHours(hh,mm,now.getSeconds(),now.getMilliseconds());
+          if(chosen.getTime()>nowMs) return alert('미래 시간부터 타이머를 시작할 수 없어요.');
+          timerOriginalStart=chosen.getTime();
+          timerElapsed=nowMs-timerOriginalStart;
+        }else{
+          // No manual edit: start at this exact moment, including seconds/ms.
+          timerOriginalStart=nowMs;
+          timerElapsed=0;
+        }
+      }
+
+      timerStarted=Date.now()-timerElapsed;
+      freezeStartInput(timerOriginalStart || timerStarted);
+      $('rTimerBtn').textContent='STOP';
+      $('rTimerStatus').textContent='기록 중이에요';
+      $('rTimerSave').style.display='block';
+      clearInterval(timerInterval);
+      timerInterval=setInterval(drawTimer,250);
+      drawTimer();
+      saveTimerState();
+    }else{
+      timerElapsed=Date.now()-timerStarted;
+      timerStarted=null;
+      clearInterval(timerInterval);
+      $('rTimerBtn').textContent='RESUME';
+      $('rTimerStatus').textContent='일시정지됨';
+      if(el) el.disabled=true; // session start remains immutable until saved
+      saveTimerState();
+    }
+  };
+
+  const oldSaveTimer=window.saveTimer;
+  window.saveTimer=function(){
+    oldSaveTimer();
+    const el=startInput();
+    if(!timerStarted && !timerElapsed){
+      if(el){
+        el.disabled=false;
+        el.dataset.autoNow='1';
+      }
+      markAutoValue();
+      clearTimerState();
+    }else{
+      saveTimerState();
+    }
+  };
+
+  const oldRestore=window.restoreTimerState;
+  window.restoreTimerState=function(){
+    oldRestore();
+    bindStartInput();
+    if((timerStarted || timerElapsed>0) && timerOriginalStart){
+      freezeStartInput(timerOriginalStart);
+    }else{
+      const el=startInput();
+      if(el){
+        el.disabled=false;
+        el.dataset.autoNow='1';
+      }
+      markAutoValue();
+    }
+  };
+
+  window.addEventListener('load',()=>{
+    setTimeout(()=>{
+      bindStartInput();
+      if((timerStarted || timerElapsed>0) && timerOriginalStart){
+        freezeStartInput(timerOriginalStart);
+      }else{
+        const el=startInput();
+        if(el && !el.value) el.dataset.autoNow='1';
+        startIdleClock();
+      }
+    },30);
+  });
+})();
+</script>
+
 </body></html>
-$('#entryDate').addEventListener('input',e=>{e.target.value=dateMask(e.target.value)});
-
-
-['#entryDate','#calendarDateInput'].forEach(sel=>{
- const el=$(sel);
- if(!el)return;
- el.readOnly=false; el.disabled=false;
- el.addEventListener('pointerdown',()=>{el.readOnly=false;el.disabled=false;});
- el.addEventListener('click',()=>{el.focus();});
-});
-
-
